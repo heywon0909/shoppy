@@ -3,12 +3,18 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./pages/Root";
 import NotFoundPage from "./pages/NotFoundPage";
 import Home from "./pages/Home";
+import Item from './pages/Item';
+import MyPage from './pages/MyPage';
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     errorElement: <NotFoundPage />,
-    children: [{ index: true, element: <Home /> }],
+    children: [
+      { index: true, element: <Home /> },
+      { path: 'item/:id', element: <Item /> },
+      {path:'myPage',element:<MyPage/>}
+    ],
   },
 ]);
 function App() {
