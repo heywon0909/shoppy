@@ -25,8 +25,30 @@ export default function MyPage() {
                 </div>
                 </div>    
             </div>
-            <div className='xl:w-2/3 w-full flex justify-center text-xl font-semibold p-2 border-b border-b-zinc-600'>
-                마이페이지
+            <div className='xl:w-2/3 w-full flex flex-col justify-center text-xl p-2'>
+                <div className='border-b border-b-zinc-600 w-full h-7 flex justify-center font-semibold'>마이페이지</div>
+                <div className='p-2 grow-0 flex flex-wrap'>
+                    <div className='md:w-1/2 p-2 flex w-full flex-wrap'>
+                        <div className='w-24 h-24 bg-slate-300 rounded-full'></div>
+                        <div className='flex flex-col p-2'>
+                            <p>박혜원 님</p>
+                            <div className='flex text-sm text-zinc-600 flex-wrap'>
+                                누적 구매 금액
+                                <p className='font-semibold'>77,000 원</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='w-1/2 p-2 flex'>
+                        <div>
+                            <div className='font-semibold text-base'>상품리뷰</div>
+                            <p>5</p>
+                        </div>
+                        <div>
+                            <div className='font-semibold text-base'>쿠폰</div>
+                            <p>5</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
