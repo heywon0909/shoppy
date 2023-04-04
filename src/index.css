@@ -15,8 +15,8 @@ body {
   @apply text-zinc-900;
 }
 
-#root{
- @apply w-full max-w-screen-xl;
+#root {
+  @apply w-full max-w-screen-xl;
 }
 
 code {

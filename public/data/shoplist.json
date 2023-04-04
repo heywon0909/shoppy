@@ -1,0 +1,132 @@
+{
+  "kind": "youtube#searchListResponse",
+  "etag": "2hS0ddC9uRno_RqLDwEuO2ZGAoA",
+  "nextPageToken": "CBkQAA",
+  "regionCode": "US",
+  "pageInfo": {
+    "totalResults": 1000000,
+    "resultsPerPage": 25
+  },
+  "items": [
+    {
+      "title": "케이블 브이넥 가디건",
+      "price": "49900",
+      "snippet": {
+        "title": "케이블 브이넥 가디건",
+        "url": "../assets/image/1.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "후드티",
+      "price": "30000",
+      "snippet": {
+        "title": "후드티",
+        "url": "../assets/image/2.webp",
+        "description": "이것은 후드티로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "트위드 원피스",
+      "price": "120000",
+      "snippet": {
+        "title": "트위드 원피스",
+        "url": "../assets/image/3.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "0"
+      }
+    },
+    {
+      "title": "트위드 셋업 하의",
+      "price": "49900",
+      "snippet": {
+        "title": "트위드 셋업 하의",
+        "url": "../assets/image/4.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "스트라이프 니트",
+      "price": "40000",
+      "snippet": {
+        "title": "스트라이프 니트",
+        "url": "../assets/image/5.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "스트라이프 원피스",
+      "price": "49900",
+      "snippet": {
+        "title": "스트라이프 원피스",
+        "url": "../assets/image/6.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "트위드 자켓",
+      "price": "49900",
+      "snippet": {
+        "title": "트위드 자켓",
+        "url": "../assets/image/7.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "핑크 후드티",
+      "price": "49900",
+      "snippet": {
+        "title": "핑크 후드티",
+        "url": "../assets/image/1.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "케이블 브이넥 가디건",
+      "price": "49900",
+      "snippet": {
+        "title": "케이블 브이넥 가디건",
+        "url": "../assets/image/2.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "케이블 브이넥 가디건",
+      "price": "49900",
+      "snippet": {
+        "title": "케이블 브이넥 가디건",
+        "url": "../assets/image/3.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "케이블 브이넥 가디건",
+      "price": "49900",
+      "snippet": {
+        "title": "케이블 브이넥 가디건",
+        "url": "../assets/image/4.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    },
+    {
+      "title": "케이블 브이넥 가디건",
+      "price": "49900",
+      "snippet": {
+        "title": "케이블 브이넥 가디건",
+        "url": "../assets/image/5.webp",
+        "description": "이것은 케이블 브이넥 가디건으로 대표적으로 가을에 입기 좋다",
+        "discount": "20"
+      }
+    }
+  ]
+}
