@@ -9,13 +9,13 @@ export default function Home() {
           alt="mainimage"
           className="w-full h-full"
         />
-        <div className="absolute w-full h-full text-center top-0 flex flex-col justify-center items-center">
+        <div className="absolute w-full h-full text-center top-0 flex flex-col justify-center items-center space-y-2">
           <div>
-            <p className="xl:text-3xl md:text-2xl text-xl text-zinc-900">our</p>
-            <p className="xl:text-5xl md:text-4xl text-3xl text-zinc-900">
+            <p className="xl:text-3xl md:text-2xl text-xl text-zinc-50">our</p>
+            <p className="xl:text-5xl md:text-4xl text-3xl text-zinc-50">
               MID-SEASON
             </p>
-            <p className="xl:text-5xl md:text-4xl text-3xl text-zinc-900">
+            <p className="xl:text-5xl md:text-4xl text-3xl text-zinc-50">
               SALE
             </p>
           </div>
