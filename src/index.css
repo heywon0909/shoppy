@@ -11,12 +11,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   width: 100vw;
   height: 100vh;
-  @apply flex flex-col items-center;
+  @apply flex flex-col items-center overflow-x-hidden;
   @apply text-zinc-900;
 }
 
 #root {
-  @apply w-full max-w-screen-xl;
+  @apply w-full;
 }
 
 code {

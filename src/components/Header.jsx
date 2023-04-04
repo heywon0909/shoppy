@@ -1,12 +1,11 @@
 import React from "react";
-import { BsCartCheck } from "react-icons/bs";
-import { FaUserCircle } from "react-icons/fa";
+import { SlHandbag } from "react-icons/sl";
+import { BsHeart } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 export default function Header() {
   const navigate = useNavigate();
   const goHome = () => navigate("/");
-
   const provider = new GoogleAuthProvider();
   const getLoginApply = () => {
     const auth = getAuth();
@@ -34,8 +33,8 @@ export default function Header() {
       });
   };
   return (
-    <header className="max-w-screen-2xl border-b border-slate-300 mb-2">
-      <div className="flex p-2 items-stretch">
+    <header className="w-full border-b border-slate-300 mb-2 p-2 flex justify-center items-center">
+      <div className="xl:w-2/3 w-full flex p-2 items-stretch">
         <div
           className="text-2xl grow flex items-center font-sans font-semibold tracking-tighter text-slate-900"
           onClick={goHome}
@@ -44,14 +43,14 @@ export default function Header() {
         </div>
         <div className="flex grow flex-row-reverse p-2 mr-5">
           <button className="ml-2">
-            <FaUserCircle
+           <SlHandbag size="20" className="text-slate-900" />
+          </button>
+          <button>
+            <BsHeart
               size="20"
               className="text-slate-900"
               onClick={getLoginApply}
             />
-          </button>
-          <button>
-            <BsCartCheck size="20" className="text-slate-900" />
           </button>
         </div>
       </div>

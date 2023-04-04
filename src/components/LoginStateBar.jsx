@@ -1,6 +1,12 @@
 import React from "react";
+import CryptoJS from 'crypto-js';
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { useLoginApi } from '../context/LoginContext';
+import { useNavigate } from 'react-router-dom';
 export default function LoginStateBar() {
+  const { login, setLogin } = useLoginApi();
+  const navigate = useNavigate();
+  console.log('login',login)
   const provider = new GoogleAuthProvider();
   const getLoginApply = () => {
     const auth = getAuth();
@@ -14,6 +20,10 @@ export default function LoginStateBar() {
         // IdP data available using getAdditionalUserInfo(result)
         // ...
         console.log("user", user, token);
+        let bytes = CryptoJS.AES.encrypt(JSON.stringify(user), process.env.REACT_APP_SECRET_KEY).toString();
+        console.log('bytes', bytes);
+        sessionStorage.login = bytes;
+        setLogin(bytes);
       })
       .catch((error) => {
         // Handle Errors here.
@@ -27,12 +37,26 @@ export default function LoginStateBar() {
         console.log("error", errorCode, errorMessage, email, credential);
       });
   };
+  const checkValidateUser = () => {
+    if (login) navigate('/myPage')
+    else getLoginApply();
+  }
+  const getLoginDismiss = () => {
+    const auth = getAuth();
+    auth.signOut();
+    setLogin('');
+    sessionStorage.removeItem('login');
+    navigate('/');
+  }
   return (
-    <div className="max-w-screen-2xl flex flex-row-reverse p-2 mr-2 bg-black">
-      <button className="pl-2 text-xs text-slate-300">마이페이지</button>
-      <button className="pl-2 text-xs text-slate-300" onClick={getLoginApply}>
+    <div className="w-full flex flex-row-reverse p-2 mr-2 bg-black">
+      <button className="mr-4 text-xs text-slate-300" onClick={checkValidateUser}>마이페이지</button>
+      {login ? <button className="mr-2 text-xs text-slate-300" onClick={getLoginDismiss}>
+        로그아웃
+      </button> : <button className="mr-2 text-xs text-slate-300" onClick={getLoginApply}>
         로그인
-      </button>
+      </button>}
     </div>
   );
 }
+

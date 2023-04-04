@@ -21,7 +21,9 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <Items />
+      <div className='w-full flex justify-center'>
+        <Items />
+      </div>  
     </div>
   );
 }

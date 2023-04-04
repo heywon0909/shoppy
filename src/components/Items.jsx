@@ -30,7 +30,7 @@ export default function Items() {
   const { isLoading, data } = useQuery(["items"], getItems);
   console.log("data", data);
   return (
-    <section className="flex w-full h-auto mt-10 flex-wrap">
+    <section className="flex md:w-2/3 w-full h-auto mt-10 flex-wrap">
       {!isLoading &&
         data.map((item, index) => {
           return <Item item={item} index={item.id} key={item.id} />;

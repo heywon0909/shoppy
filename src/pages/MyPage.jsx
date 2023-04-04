@@ -2,7 +2,8 @@ import React from 'react';
 
 export default function MyPage() {
     return (
-        <div className='w-full flex p-2 flex-wrap'>
+        <div className='flex justify-center p-2'>
+        <div className='md:w-2/3 w-full flex p-2 flex-wrap justify-center'>
             <div className='xl:w-1/3 w-full'>
                 <div className='xl:pt-10 space-y-6 w-auto'>
                 <div>
@@ -50,6 +51,7 @@ export default function MyPage() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

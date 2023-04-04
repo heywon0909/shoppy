@@ -16,7 +16,7 @@ export default function ItemDetail() {
   const { isLoading, data } = useQuery(["itemDetail"], () => getItemDetail(id));
 
   return (
-    <section className="w-full">
+    <section className="flex justify-center p-2">
       {!isLoading && (
         <article className="flex p-2 justify-center flex-wrap">
           <div className="xl:w-3/6 w-full h-auto">
