@@ -1,50 +1,79 @@
 import React from "react";
-import { BsHeart } from "react-icons/bs";
+import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
 import { db } from "../firebase/firebase";
 import {
-  collection,
+  //   collection,
   query,
   where,
-  getDocs,
+  //   getDocs,
+  setDoc,
   doc,
   getDoc,
+  getDocs,
   updateDoc,
-  setDoc,
+  //   setDoc,
   arrayUnion,
+  collection,
 } from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { useLoginApi } from "../context/LoginContext";
+import { getItem, getMyInterest } from "../api/ShopServices";
 export default function ItemDetail() {
   const { id } = useParams();
   const { login } = useLoginApi();
-  const getItemDetail = async (key) => {
-    const itemsCollectionRef = collection(db, "shop", "list", "items");
-    const q = query(itemsCollectionRef, where("id", "==", key));
-    const data = await getDocs(q);
-    const newData = data.docs.map((doc) => ({ ...doc.data() }));
-    return newData[0];
-  };
-  const onAddInterest = async () => {
-    const userCollectionRef = doc(db, "user", "interest");
-    const docSnap = await getDoc(userCollectionRef);
-    console.log("doc", docSnap.data());
+  // eslint-disable-next-line
+  const { isLoading: isInterest, data: interest } = useQuery(
+    ["exist"],
+    () => getMyInterest(id, login.uid),
+    { keepPreviousData: false }
+  );
+  console.log("is", isInterest, interest, id);
+  const { isLoading, data } = useQuery(["itemDetail"], () => getItem(id));
 
-    const frankDocRef = doc(db, "user", "interest");
-    const result = await updateDoc(frankDocRef, {
-      id: login.uid,
-      username: login.displayName,
-      email: login.email,
-      items: arrayUnion({
-        id: id,
-        title: data.title,
-        price: data.price,
-        snippet: { ...data.snippet },
-      }),
-    });
+  const onAddInterest = async () => {
+    // if (login) {
+    //   const userCollectionRef = doc(db, "user", "interest");
+    //   console.log("user", userCollectionRef);
+    //   const q = query(userCollectionRef, where("id", "==", login.uid));
+    //   const querySnapShot = await getDoc(q);
+    //   console.log("q", querySnapShot.data());
+    // }
+
+    const interestCollectionRef = doc(db, "interest", login.uid);
+    const docSnap = await getDoc(interestCollectionRef);
+    let result = docSnap.data();
+    if (!result) {
+      const docRef = await setDoc(doc(db, "interest", login.uid), {
+        id: login.uid,
+        username: login.displayName,
+        email: login.email,
+        items: [
+          {
+            id: id,
+            title: data.title,
+            price: data.price,
+            snippet: { ...data.snippet },
+          },
+        ],
+      });
+      console.log("doc", docRef);
+    } else {
+      const frankDocRef = doc(db, "interest", login.uid);
+      await updateDoc(frankDocRef, {
+        id: login.uid,
+        username: login.displayName,
+        email: login.email,
+        items: arrayUnion({
+          id: id,
+          title: data.title,
+          price: data.price,
+          snippet: { ...data.snippet },
+        }),
+      });
+    }
     console.log("result", result);
   };
-  const { isLoading, data } = useQuery(["itemDetail"], () => getItemDetail(id));
 
   return (
     <section className="flex justify-center p-2">
@@ -63,7 +92,11 @@ export default function ItemDetail() {
               <p className="text-purple-500 text-2xl">{data.price}</p>
             </div>
             <div className="p-2 space-y-4 border-b border-zinc-300">
-              <BsHeart onClick={onAddInterest} />
+              {!isInterest && interest ? (
+                <BsHeartFill />
+              ) : (
+                <BsHeart onClick={onAddInterest} />
+              )}
             </div>
             <div className="space-y-4 border-b border-zinc-300 pb-4 h-full">
               <p>{data.snippet.description}</p>
