@@ -15,13 +15,15 @@ export function LoginApiProvider({ children }) {
     }
   });
   const setValidateUser = (user) => {
+    console.log('user',user)
     if (user) {
-      setLogin(user);
+      console.log('ㅇㅇ')
       let bytes = CryptoJS.AES.encrypt(
         JSON.stringify(user),
         process.env.REACT_APP_SECRET_KEY
       ).toString();
       sessionStorage.login = bytes;
+      setLogin(user);
     } else {
       setLogin("");
       sessionStorage.removeItem("login");

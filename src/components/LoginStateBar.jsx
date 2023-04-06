@@ -14,8 +14,9 @@ export default function LoginStateBar() {
     getLoginApply,
     {
       enabled: false,
-      onSuccess: () => {
-        setValidateUser(user);
+      onSuccess: (data) => {
+        console.log('data',data)
+        setValidateUser(data);
       },
     }
   );
@@ -50,7 +51,7 @@ export default function LoginStateBar() {
       </button>
 
       <button className="mr-2 text-xs text-slate-300" onClick={handleLogin}>
-        {login ? "로그아웃" : "로그인"}
+        {user ? "로그아웃" : "로그인"}
       </button>
     </div>
   );

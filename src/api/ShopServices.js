@@ -86,13 +86,13 @@ export const getMyInterest = async (id, login = null) => {
     const q = query(userCollectionRef, where("id", "==", login));
     const querySnapShot = await getDocs(q);
     querySnapShot.forEach((doc) => {
-      result = doc.data().items.filter((item) => item.id === id);
+      result = doc.data().items;
     });
-    console.log("타니", result);
-    return result == null ? null : result[0];
+    
+    return result;
   } catch (error) {
     console.log(error);
   } finally {
-    return result == null ? null : result[0];
+    return result;
   }
 };

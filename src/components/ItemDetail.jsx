@@ -23,10 +23,17 @@ export default function ItemDetail() {
   const { id } = useParams();
   const { login } = useLoginApi();
   // eslint-disable-next-line
-  const { isLoading: isInterest, data: interest } = useQuery(
+  let error = false;
+  const { isLoading: isInterest, data:interest } = useQuery(
     ["exist"],
     () => getMyInterest(id, login.uid),
-    { keepPreviousData: false }
+    {
+      keepPreviousData: false,
+      select: data => {
+        const interest = data.filter((item) => item.id === id);
+        return interest;
+      }
+    }
   );
   console.log("is", isInterest, interest, id);
   const { isLoading, data } = useQuery(["itemDetail"], () => getItem(id));
@@ -92,7 +99,7 @@ export default function ItemDetail() {
               <p className="text-purple-500 text-2xl">{data.price}</p>
             </div>
             <div className="p-2 space-y-4 border-b border-zinc-300">
-              {!isInterest && interest ? (
+              {!isInterest && interest.length > 0 ? (
                 <BsHeartFill />
               ) : (
                 <BsHeart onClick={onAddInterest} />
