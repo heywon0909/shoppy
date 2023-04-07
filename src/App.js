@@ -3,8 +3,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Root from "./pages/Root";
 import NotFoundPage from "./pages/NotFoundPage";
 import Home from "./pages/Home";
-import Item from './pages/Item';
-import MyPage from './pages/MyPage';
+import Item from "./pages/Item";
+import MyPage from "./pages/MyPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -12,8 +12,10 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       { index: true, element: <Home /> },
-      { path: 'item/:id', element: <Item /> },
-      {path:'myPage',element:<MyPage/>}
+      { path: "item/:id", element: <Item /> },
+      { path: "myPage", element: <MyPage /> },
+      { path: "myPage/myWishList", element: <MyPage /> },
+      { path: "myPage/order/new", element: <MyPage /> },
     ],
   },
 ]);

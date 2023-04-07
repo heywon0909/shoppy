@@ -78,7 +78,7 @@ export const getLoginApply = async () => {
     return user;
   }
 };
-export const getMyInterest = async (id, login = null) => {
+export const getMyInterest = async (login = null, id) => {
   let result = null;
   console.log("id", id);
   try {
@@ -88,7 +88,7 @@ export const getMyInterest = async (id, login = null) => {
     querySnapShot.forEach((doc) => {
       result = doc.data().items;
     });
-    
+
     return result;
   } catch (error) {
     console.log(error);
