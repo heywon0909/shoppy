@@ -120,6 +120,7 @@ export const onAddInterest = async (data, login) => {
           },
         ],
       });
+      if(docRef)
       console.log("doc", docRef);
     } else {
       const frankDocRef = doc(db, "interest",uid);
@@ -150,7 +151,9 @@ export const onRemoveInterest = async (data, login) => {
       email: login.email,
       items: arrayRemove(item[0])
     });
-    console.log('doc',docRef)
+    if (docRef == null) {
+      return true;
+    }
   
   }
 }
