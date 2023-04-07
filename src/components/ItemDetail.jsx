@@ -1,87 +1,46 @@
 import React from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
-import { db } from "../firebase/firebase";
-import {
-  //   collection,
-  query,
-  where,
-  //   getDocs,
-  setDoc,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  //   setDoc,
-  arrayUnion,
-  collection,
-} from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { useLoginApi } from "../context/LoginContext";
-import { getItem, getMyInterest } from "../api/ShopServices";
+import { getItem, getMyInterest, onAddInterest,onRemoveInterest } from "../api/ShopServices";
 export default function ItemDetail() {
   const { id } = useParams();
   const { login } = useLoginApi();
-  // eslint-disable-next-line
-  let error = false;
   const { isLoading: isInterest, data:interest } = useQuery(
     ["exist"],
-    () => getMyInterest(id, login.uid),
+    () => getMyInterest(id,login.uid),
     {
       keepPreviousData: false,
       select: data => {
+        console.log('data', data);
         const interest = data.filter((item) => item.id === id);
         return interest;
       }
     }
   );
-  console.log("is", isInterest, interest, id);
+ 
   const { isLoading, data } = useQuery(["itemDetail"], () => getItem(id));
-
-  const onAddInterest = async () => {
-    // if (login) {
-    //   const userCollectionRef = doc(db, "user", "interest");
-    //   console.log("user", userCollectionRef);
-    //   const q = query(userCollectionRef, where("id", "==", login.uid));
-    //   const querySnapShot = await getDoc(q);
-    //   console.log("q", querySnapShot.data());
-    // }
-
-    const interestCollectionRef = doc(db, "interest", login.uid);
-    const docSnap = await getDoc(interestCollectionRef);
-    let result = docSnap.data();
-    if (!result) {
-      const docRef = await setDoc(doc(db, "interest", login.uid), {
-        id: login.uid,
-        username: login.displayName,
-        email: login.email,
-        items: [
-          {
-            id: id,
-            title: data.title,
-            price: data.price,
-            snippet: { ...data.snippet },
-          },
-        ],
-      });
-      console.log("doc", docRef);
+  const { refetch: addInterest } = useQuery(["addInterest"], () => onAddInterest(data,login), {
+      enabled: false
+  });
+  const { refetch: removeItem } = useQuery(["removeInterest"], () => onRemoveInterest(data, login), {
+   enabled:false
+  })
+  const handleInterest = () => {
+    console.log('interest', interest);
+    if (interest?.length === 0) {
+     if (login) {
+      return addInterest();
     } else {
-      const frankDocRef = doc(db, "interest", login.uid);
-      await updateDoc(frankDocRef, {
-        id: login.uid,
-        username: login.displayName,
-        email: login.email,
-        items: arrayUnion({
-          id: id,
-          title: data.title,
-          price: data.price,
-          snippet: { ...data.snippet },
-        }),
-      });
+      return console.alert('로그인을 해주세요');
+    } 
     }
-    console.log("result", result);
-  };
-
+    if (login) {
+      console.log('응')
+      removeItem();
+    }
+  }
   return (
     <section className="flex justify-center p-2">
       {!isLoading && (
@@ -99,15 +58,15 @@ export default function ItemDetail() {
               <p className="text-purple-500 text-2xl">{data.price}</p>
             </div>
             <div className="p-2 space-y-4 border-b border-zinc-300">
-              {!isInterest && interest.length > 0 ? (
-                <BsHeartFill />
+              {!isInterest && interest?.length > 0 ? (
+                <BsHeartFill onClick={handleInterest} />
               ) : (
-                <BsHeart onClick={onAddInterest} />
+                <BsHeart onClick={handleInterest} />
               )}
             </div>
             <div className="space-y-4 border-b border-zinc-300 pb-4 h-full">
               <p>{data.snippet.description}</p>
-              <p className="text-purple-500 text-2xl">하트작업중..</p>
+              {/* <p className="text-purple-500 text-2xl">하트작업중..</p> */}
             </div>
           </div>
         </article>

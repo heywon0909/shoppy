@@ -3,10 +3,13 @@ import {
   arrayUnion,
   collection,
   getDocs,
+  getDoc,
+  setDoc,
   query,
   where,
   doc,
   updateDoc,
+  arrayRemove
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 export const getItems = async () => {
@@ -78,7 +81,7 @@ export const getLoginApply = async () => {
     return user;
   }
 };
-export const getMyInterest = async (login = null, id) => {
+export const getMyInterest = async (id,login=null) => {
   let result = null;
   console.log("id", id);
   try {
@@ -96,3 +99,58 @@ export const getMyInterest = async (login = null, id) => {
     return result;
   }
 };
+export const onAddInterest = async (data, login) => {
+  const uid = login ? login.uid : ''
+  const interestCollectionRef = doc(db, "interest",uid);
+    const docSnap = await getDoc(interestCollectionRef);
+  let result = docSnap.data();
+  console.log('res', result);
+  console.log('data', data);
+    if (!result) {
+      const docRef = await setDoc(doc(db, "interest",uid), {
+        id:uid,
+        username: login.displayName,
+        email: login.email,
+        items: [
+          {
+            id: data.id,
+            title: data.title,
+            price: data.price,
+            snippet: { ...data.snippet },
+          },
+        ],
+      });
+      console.log("doc", docRef);
+    } else {
+      const frankDocRef = doc(db, "interest",uid);
+      await updateDoc(frankDocRef, {
+        id:uid,
+        username: login.displayName,
+        email: login.email,
+        items: arrayUnion({
+          id: data.id,
+          title: data.title,
+          price: data.price,
+          snippet: { ...data.snippet },
+        }),
+      });
+    }
+}
+export const onRemoveInterest = async (data, login) => {
+  const uid = login ? login.uid : '';
+  const interestCollectionRef = doc(db, 'interest', uid);
+  const docSnap = await getDoc(interestCollectionRef);
+  let result = docSnap.data();
+  const item = result.items.filter((item) => item.id === data.id);
+  console.log('item',item)
+  if (result) {
+    const docRef = await updateDoc(doc(db, "interest", uid), {
+      id: uid,
+      username: login.displayName,
+      email: login.email,
+      items: arrayRemove(item[0])
+    });
+    console.log('doc',docRef)
+  
+  }
+}
