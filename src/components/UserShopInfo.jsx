@@ -7,7 +7,8 @@ export default function UserShopInfo() {
   const { isLoading, data } = useQuery(["buyItems"], () =>
     getBuyItem(login?.uid)
   );
-  console.log("items", data);
+  console.log("items", login);
+
   return (
     <>
       <div className="p-2 flex w-full flex-wrap h-24 block h-auto">
@@ -17,7 +18,7 @@ export default function UserShopInfo() {
           </div>
         </div>
         <div className="flex flex-col p-2 h-24">
-          <p>박혜원 님</p>
+          <p>혜원 님</p>
           <div className="flex text-sm text-zinc-600 flex-wrap">
             누적 구매 금액
             <p className="font-semibold">77,000 원</p>

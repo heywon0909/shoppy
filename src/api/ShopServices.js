@@ -49,12 +49,11 @@ export const signWithGoogle = async () => {
   await signInWithRedirect(auth, provider);
 };
 export const getLoginApply = async () => {
-  const provider = new GoogleAuthProvider();
   let user = null;
   try {
     const auth = getAuth();
-    user = await signInWithRedirect(auth, provider).then((result) => {
-      console.log("타니");
+    user = await getRedirectResult(auth).then((result) => {
+      return result.user
     });
     console.log("user", user);
 

@@ -23,7 +23,7 @@ export default function MyPage() {
           >
             {pathname.includes("secured") ? "마이페이지" : ""}
             {pathname.includes("cart") ? "장바구니" : ""}
-            {pathname.includes("Wish") ? "관심목록" : ""}
+            {pathname.includes("Wish") ? "위시리스트" : ""}
             {pathname.includes("new") ? "결제하기" : ""}
           </div>
           {pathname.includes("secured") ? <UserShopInfo /> : ""}

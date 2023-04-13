@@ -32,10 +32,10 @@ export default function Header() {
     <header className="w-full border-b border-slate-300 mb-2 p-2 flex justify-center items-center">
       <div className="xl:w-2/3 w-full flex p-2 items-stretch">
         <div
-          className="text-2xl grow flex items-center font-sans font-semibold tracking-tighter text-slate-900"
+          className="text-2xl grow flex items-center font-sans tracking-tighter text-purple-500"
           onClick={goHome}
         >
-          SHOPPY
+          <mark className="font-semibold text-purple-600 pe-2">HW</mark> SHOPPY
         </div>
         <div className="flex grow flex-row-reverse p-2 mr-5">
           <button className="ml-2">

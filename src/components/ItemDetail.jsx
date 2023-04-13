@@ -71,12 +71,15 @@ export default function ItemDetail() {
               <p className="text-2xl">{data.title}</p>
               <p className="text-purple-500 text-2xl">{data.price}</p>
             </div>
-            <div className="p-2 space-y-4 border-b border-zinc-300">
+            <div className="p-2 border-b border-zinc-300 flex">
+              <div className='pt-1'>
               {!isInterest && interest?.length > 0 ? (
                 <BsHeartFill onClick={() => onDelInterest(data, login)} />
               ) : (
                 <BsHeart onClick={() => onAddInterest(data, login)} />
-              )}
+                )}
+              </div>  
+             {/* <p className='ml-2 pb-1 text-sm font-semibold text-zinc-500'>{data.heart}+</p> */}
             </div>
             <div className="space-y-4 border-b border-zinc-300 pb-4 h-full">
               <p>{data.snippet.description}</p>

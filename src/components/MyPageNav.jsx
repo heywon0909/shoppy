@@ -10,7 +10,7 @@ export default function MyPageNav() {
         <div>
           <p className="text-md font-semibold">나의 주문 내역</p>
           <ul>
-            <li className="text-sm">마이페이지</li>
+            <li className="text-sm" onClick={() => navigate("/secured/mypage/myPage")}>마이페이지</li>
           </ul>
         </div>
         <div>
