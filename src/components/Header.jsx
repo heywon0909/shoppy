@@ -23,9 +23,9 @@ export default function Header() {
   const goMyPage = (type) => {
     if (!login) return loginApply();
     if (type === "buying") {
-      return navigate("/myPage/order/new");
+      return navigate("/myPage/order/cart");
     } else if (type === "interest") {
-      return navigate("myPage/myWishList");
+      return navigate("/myPage/myWishList");
     } else throw new Error("not found page");
   };
   return (

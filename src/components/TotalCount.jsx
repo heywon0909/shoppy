@@ -47,7 +47,9 @@ export default function TotalCount({ sum }) {
       <div className="w-full p-2 flex justify-center">
         <button
           className="md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"
-          onClick={() => navigate(`myPage/order/new/${items.join("&")}`)}
+          onClick={() =>
+            navigate("/myPage/order/new/" + String(items?.join("&")))
+          }
         >
           바로구매
         </button>

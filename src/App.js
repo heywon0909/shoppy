@@ -19,7 +19,7 @@ const router = createBrowserRouter([
       { path: "myPage", element: <MyPage /> },
       { path: "myPage/myWishList", element: <MyPage /> },
       { path: "myPage/order/cart", element: <MyPage /> },
-      { path: "myPage/order/new", element: <MyPage /> },
+      { path: "myPage/order/new/:items", element: <MyPage /> },
     ],
   },
 ]);

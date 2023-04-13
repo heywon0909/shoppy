@@ -49,7 +49,7 @@ export default function ShopItem({ item }) {
         <div className="relative">
           <button
             className="w-full bg-slate-900 text-white p-2"
-            onClick={() => navigate(`myPage/order/new/${id}`)}
+            onClick={() => navigate("/myPage/order/new/" + id)}
           >
             바로구매
           </button>

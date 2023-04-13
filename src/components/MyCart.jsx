@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getBuyingItem } from "../api/ShopServices";
 import { useLoginApi } from "../context/LoginContext";
 import ShopItem from "./ShopItem";
 import TotalCount from "./TotalCount";
+import UserShopInfo from "./UserShopInfo";
 
 export default function MyShopInterest() {
   const { login } = useLoginApi();
@@ -30,16 +31,7 @@ export default function MyShopInterest() {
 
   return (
     <div className="p-2 grow-0 flex flex-wrap">
-      <div className="p-2 flex w-full flex-wrap h-24">
-        <div className="w-24 h-24 bg-slate-300 rounded-full"></div>
-        <div className="flex flex-col p-2 h-24">
-          <p>박혜원 님</p>
-          <div className="flex text-sm text-zinc-600 flex-wrap">
-            누적 구매 금액
-            <p className="font-semibold">77,000 원</p>
-          </div>
-        </div>
-      </div>
+      <UserShopInfo />
       <div className="w-full p-2 flex flex-col">
         <table className="table-auto text-sm">
           <thead className="border-b border-zinc-600 pb-3">
