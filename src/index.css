@@ -23,3 +23,7 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+mark {
+  @apply text-purple-500 bg-white font-semibold ps-2 pe-2;
+}

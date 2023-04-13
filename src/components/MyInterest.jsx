@@ -5,7 +5,7 @@ import { useLoginApi } from "../context/LoginContext";
 export default function MyInterest() {
   const { login } = useLoginApi();
   const { isLoading, data: items } = useQuery(["myInterest"], () =>
-    getMyInterest(login.uid)
+    getMyInterest(null, login.uid)
   );
   console.log("isLoading", isLoading, items);
   return (
@@ -13,7 +13,7 @@ export default function MyInterest() {
       {!isLoading &&
         items.map((item) => {
           return (
-            <div className="w-1/3 p-2 flex flex-col">
+            <div className="w-1/3 p-2 flex flex-col" key={item.id}>
               <div className="w-40 h-56 bg-slate-100">
                 <img
                   src={item.snippet.url}

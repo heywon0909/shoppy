@@ -29,9 +29,9 @@ export default function MyPageNav() {
           <ul>
             <li
               className="text-sm"
-              onClick={() => navigate("/myPage/order/new")}
+              onClick={() => navigate("/myPage/order/cart")}
             >
-              위시리스트
+              장바구니
             </li>
           </ul>
         </div>

@@ -1,86 +1,59 @@
 import React from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
-import { db } from "../firebase/firebase";
-import {
-  //   collection,
-  query,
-  where,
-  //   getDocs,
-  setDoc,
-  doc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  //   setDoc,
-  arrayUnion,
-  collection,
-} from "firebase/firestore";
 import { useParams } from "react-router-dom";
 import { useLoginApi } from "../context/LoginContext";
-import { getItem, getMyInterest } from "../api/ShopServices";
+import {
+  addBuyItem,
+  delMyInterest,
+  getItem,
+  getMyInterest,
+  setMyInterest,
+} from "../api/ShopServices";
 export default function ItemDetail() {
   const { id } = useParams();
   const { login } = useLoginApi();
-  // eslint-disable-next-line
-  let error = false;
-  const { isLoading: isInterest, data:interest } = useQuery(
-    ["exist"],
-    () => getMyInterest(id, login.uid),
+
+  const {
+    isLoading: isInterest,
+    data: interest,
+    refetch: readingItem,
+  } = useQuery(["exist"], () => getMyInterest(id, login?.uid), {
+    keepPreviousData: false,
+    select: (data) => {
+      const interest = data?.filter((item) => item.id === id);
+      return interest;
+    },
+  });
+
+  const { isLoading, data } = useQuery(["itemDetail"], () => getItem(id));
+  const { isSuccess: isAddingSuccess, refetch: onAddInterest } = useQuery(
+    ["AddInterest"],
+    () => setMyInterest(data, login),
+    { enabled: false }
+  );
+
+  const { isSuccess: isDeleteSuccess, refetch: onDelInterest } = useQuery(
+    ["onDeleteInterest"],
+    () => delMyInterest(data, login),
     {
-      keepPreviousData: false,
-      select: data => {
-        const interest = data.filter((item) => item.id === id);
-        return interest;
-      }
+      enabled: false,
     }
   );
-  console.log("is", isInterest, interest, id);
-  const { isLoading, data } = useQuery(["itemDetail"], () => getItem(id));
+  if (isDeleteSuccess || isAddingSuccess) {
+    readingItem(id, login?.uid);
+  }
 
-  const onAddInterest = async () => {
-    // if (login) {
-    //   const userCollectionRef = doc(db, "user", "interest");
-    //   console.log("user", userCollectionRef);
-    //   const q = query(userCollectionRef, where("id", "==", login.uid));
-    //   const querySnapShot = await getDoc(q);
-    //   console.log("q", querySnapShot.data());
-    // }
-
-    const interestCollectionRef = doc(db, "interest", login.uid);
-    const docSnap = await getDoc(interestCollectionRef);
-    let result = docSnap.data();
-    if (!result) {
-      const docRef = await setDoc(doc(db, "interest", login.uid), {
-        id: login.uid,
-        username: login.displayName,
-        email: login.email,
-        items: [
-          {
-            id: id,
-            title: data.title,
-            price: data.price,
-            snippet: { ...data.snippet },
-          },
-        ],
-      });
-      console.log("doc", docRef);
-    } else {
-      const frankDocRef = doc(db, "interest", login.uid);
-      await updateDoc(frankDocRef, {
-        id: login.uid,
-        username: login.displayName,
-        email: login.email,
-        items: arrayUnion({
-          id: id,
-          title: data.title,
-          price: data.price,
-          snippet: { ...data.snippet },
-        }),
-      });
+  const { isSuccess: isAddBuying, refetch: onAddBuying } = useQuery(
+    ["onAddBuying"],
+    () => addBuyItem(data, login),
+    {
+      enabled: false,
     }
-    console.log("result", result);
-  };
+  );
+  if (isAddBuying) {
+    console.log("팝업창 구성중..");
+  }
 
   return (
     <section className="flex justify-center p-2">
@@ -99,15 +72,26 @@ export default function ItemDetail() {
               <p className="text-purple-500 text-2xl">{data.price}</p>
             </div>
             <div className="p-2 space-y-4 border-b border-zinc-300">
-              {!isInterest && interest.length > 0 ? (
-                <BsHeartFill />
+              {!isInterest && interest?.length > 0 ? (
+                <BsHeartFill onClick={() => onDelInterest(data, login)} />
               ) : (
-                <BsHeart onClick={onAddInterest} />
+                <BsHeart onClick={() => onAddInterest(data, login)} />
               )}
             </div>
             <div className="space-y-4 border-b border-zinc-300 pb-4 h-full">
               <p>{data.snippet.description}</p>
               <p className="text-purple-500 text-2xl">하트작업중..</p>
+              <div className="w-full flex items-stretch p-2">
+                <button
+                  className="w-full bg-slate-700 text-white p-2 mr-2"
+                  onClick={() => onAddBuying(id, login)}
+                >
+                  장바구니
+                </button>
+                <button className="w-full bg-purple-500 text-white p-2">
+                  바로구매
+                </button>
+              </div>
             </div>
           </div>
         </article>
