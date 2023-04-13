@@ -80,7 +80,7 @@ export default function ItemDetail() {
             </div>
             <div className="space-y-4 border-b border-zinc-300 pb-4 h-full">
               <p>{data.snippet.description}</p>
-              <p className="text-purple-500 text-2xl">하트작업중..</p>
+              {/* <p className="text-purple-500 text-2xl">하트작업중..</p> */}
               <div className="w-full flex items-stretch p-2">
                 <button
                   className="w-full bg-slate-700 text-white p-2 mr-2"

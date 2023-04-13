@@ -10,12 +10,12 @@ import {
   arrayRemove,
   collection,
   getDocs,
+  getDoc,
+  setDoc,
   query,
   where,
   doc,
   updateDoc,
-  getDoc,
-  setDoc,
 } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 export const getItems = async () => {

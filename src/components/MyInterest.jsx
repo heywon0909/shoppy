@@ -22,8 +22,8 @@ export default function MyInterest() {
                 />
               </div>
               <div className="flex flex-col text-sm text-zinc-600 p-2">
-                <p>반팔 데님원피스</p>
-                <p className="font-semibold">41,900원</p>
+                <p>{item.title}</p>
+                <p className="font-semibold">{item.price}원</p>
               </div>
             </div>
           );
