@@ -60,7 +60,7 @@ export default function LoginStateBar() {
   };
 
   const checkValidateUser = () => {
-    if (login) navigate("./myPage");
+    if (login) navigate("secured/mypage/myPage");
     else getLoginApply();
   };
 

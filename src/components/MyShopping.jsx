@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import UserShopInfo from "./UserShopInfo";
 import { useQuery } from "@tanstack/react-query";
-import { getBuyingItem } from "../api/ShopServices";
+import { buyItem, getBuyingItem } from "../api/ShopServices";
 import { useLoginApi } from "../context/LoginContext";
 import { useLocation } from "react-router-dom";
 import ShopItem from "./ShopItem";
@@ -14,6 +13,7 @@ export default function MyShopping() {
   }, [pathname]);
 
   const { login } = useLoginApi();
+
   const {
     isLoading,
     data: items,
@@ -27,10 +27,20 @@ export default function MyShopping() {
   if (id) {
     getBuyItems(login?.uid);
   }
+
+  const { refetch: onBuyItem } = useQuery(
+    ["getBuy"],
+    () => buyItem(items, login),
+    {
+      enabled: false,
+      onSuccess: (data) => {
+        console.log("성공");
+      },
+    }
+  );
   console.log("isLoading", isLoading, items);
   return (
     <div className="p-2 grow-0 flex flex-wrap">
-      <UserShopInfo />
       <div className="w-full p-2 flex flex-col">
         <table className="table-auto text-sm">
           <thead className="border-b border-zinc-600 pb-3">
@@ -44,7 +54,10 @@ export default function MyShopping() {
             {!isLoading &&
               items.map((item) => {
                 return (
-                  <tr className="border-b border-zinc-300 relative">
+                  <tr
+                    className="border-b border-zinc-300 relative"
+                    key={item.id}
+                  >
                     <td>
                       <div className="flex p-2">
                         <div className=" h-32 w-24 bg-slate-300">
@@ -55,7 +68,7 @@ export default function MyShopping() {
                           />
                         </div>
                         <div className="flex flex-col p-2 h-24">
-                          <p className="text-sm">item.title</p>
+                          <p className="text-sm">{item.title}</p>
                           <div className="flex text-sm text-zinc-600 flex-wrap">
                             1개
                           </div>
@@ -75,6 +88,14 @@ export default function MyShopping() {
               })}
           </tbody>
         </table>
+        <div className="w-full flex justify-center p-2 mt-2">
+          <button
+            className="md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"
+            onClick={() => onBuyItem(items, login)}
+          >
+            결제하기
+          </button>
+        </div>
       </div>
     </div>
   );

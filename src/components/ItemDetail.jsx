@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { useLoginApi } from "../context/LoginContext";
 import {
-  addBuyItem,
+  addBuyingItem,
   delMyInterest,
   getItem,
   getMyInterest,
@@ -46,7 +46,7 @@ export default function ItemDetail() {
 
   const { isSuccess: isAddBuying, refetch: onAddBuying } = useQuery(
     ["onAddBuying"],
-    () => addBuyItem(data, login),
+    () => addBuyingItem(data, login),
     {
       enabled: false,
     }

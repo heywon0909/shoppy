@@ -158,14 +158,14 @@ export const delMyInterest = async (item, login) => {
     return result == null ? true : false;
   }
 };
-export const addBuyItem = async (item, login) => {
+export const addBuyingItem = async (item, login) => {
   let result = null;
   try {
-    const buyCollectionRef = doc(db, "buying", login.uid);
-    const docSnap = await getDoc(buyCollectionRef);
+    const buyingCollectionRef = doc(db, "buying", login.uid);
+    const docSnap = await getDoc(buyingCollectionRef);
     let dataList = docSnap.data();
     if (dataList) {
-      result = await updateDoc(buyCollectionRef, {
+      result = await updateDoc(buyingCollectionRef, {
         id: login.uid,
         username: login.displayName,
         email: login.email,
@@ -237,5 +237,56 @@ export const delBuyingItem = async (item, login) => {
     console.log(error);
   } finally {
     return result == null ? true : false;
+  }
+};
+export const buyItem = async (item, login) => {
+  let result = null;
+  try {
+    const buyCollectionRef = doc(db, "buy", login.uid);
+    const docSnap = await getDoc(buyCollectionRef);
+    let dataList = docSnap.data();
+    if (dataList) {
+      result = await updateDoc(buyCollectionRef, {
+        id: login.uid,
+        date: new Date().toLocaleDateString(),
+        username: login.displayName,
+        email: login.email,
+        items: arrayUnion(...item),
+      });
+    } else {
+      result = await setDoc(doc(db, "buy", login.uid), {
+        id: login.uid,
+        date: new Date().toLocaleDateString(),
+        username: login.displayName,
+        email: login.email,
+        items: item,
+      });
+    }
+
+    return result == null ? true : false;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return result == null ? true : false;
+  }
+};
+export const getBuyItem = async (login = null) => {
+  let result = null;
+
+  try {
+    const buyCollectionRef = collection(db, "buy");
+    const q = query(buyCollectionRef, where("id", "==", login));
+    const querySnapShot = await getDocs(q);
+
+    querySnapShot.forEach((doc) => {
+      console.log("doc", doc.data());
+      result = doc.data();
+    });
+
+    return result == null ? true : result;
+  } catch (error) {
+    console.log(error);
+  } finally {
+    return result == null ? true : result;
   }
 };

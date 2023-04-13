@@ -4,7 +4,6 @@ import { getBuyingItem } from "../api/ShopServices";
 import { useLoginApi } from "../context/LoginContext";
 import ShopItem from "./ShopItem";
 import TotalCount from "./TotalCount";
-import UserShopInfo from "./UserShopInfo";
 
 export default function MyShopInterest() {
   const { login } = useLoginApi();
@@ -31,7 +30,6 @@ export default function MyShopInterest() {
 
   return (
     <div className="p-2 grow-0 flex flex-wrap">
-      <UserShopInfo />
       <div className="w-full p-2 flex flex-col">
         <table className="table-auto text-sm">
           <thead className="border-b border-zinc-600 pb-3">
