@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
@@ -12,19 +12,32 @@ import {
 } from "../api/ShopServices";
 export default function ItemDetail() {
   const { id } = useParams();
-  const { login } = useLoginApi();
+  const { shop, login } = useLoginApi();
 
   const {
     isLoading: isInterest,
     data: interest,
     refetch: readingItem,
-  } = useQuery(["exist"], () => getMyInterest(id, login?.uid), {
-    keepPreviousData: false,
+  } = useQuery(["exist"], () => shop.getItem(id), {
+    enabled: false,
     select: (data) => {
+      console.log("data", data);
       const interest = data?.filter((item) => item.id === id);
       return interest;
     },
   });
+
+  useEffect(() => {
+    console.log("타니");
+    const stored = JSON.parse(sessionStorage.shoppy);
+
+    const userId = stored?.uid;
+    console.log("store", stored, userId, id);
+    if (userId && id) {
+      shop.login(stored);
+      readingItem(id, userId);
+    }
+  }, [id, readingItem]);
 
   const { isLoading, data } = useQuery(["itemDetail"], () => getItem(id));
   const { isSuccess: isAddingSuccess, refetch: onAddInterest } = useQuery(
@@ -72,14 +85,14 @@ export default function ItemDetail() {
               <p className="text-purple-500 text-2xl">{data.price}</p>
             </div>
             <div className="p-2 border-b border-zinc-300 flex">
-              <div className='pt-1'>
-              {!isInterest && interest?.length > 0 ? (
-                <BsHeartFill onClick={() => onDelInterest(data, login)} />
-              ) : (
-                <BsHeart onClick={() => onAddInterest(data, login)} />
+              <div className="pt-1">
+                {!isInterest && interest?.length > 0 ? (
+                  <BsHeartFill onClick={() => onDelInterest(data, login)} />
+                ) : (
+                  <BsHeart onClick={() => onAddInterest(data, login)} />
                 )}
-              </div>  
-             {/* <p className='ml-2 pb-1 text-sm font-semibold text-zinc-500'>{data.heart}+</p> */}
+              </div>
+              {/* <p className='ml-2 pb-1 text-sm font-semibold text-zinc-500'>{data.heart}+</p> */}
             </div>
             <div className="space-y-4 border-b border-zinc-300 pb-4 h-full">
               <p>{data.snippet.description}</p>

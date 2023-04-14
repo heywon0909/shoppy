@@ -11,38 +11,29 @@ import {
   signWithGoogle,
 } from "../api/ShopServices";
 export default function LoginStateBar() {
-  const { login, setValidateUser } = useLoginApi();
+  const { shop, login, setValidateUser } = useLoginApi();
+  console.log("shop", shop);
   const navigate = useNavigate();
 
-  const {
-    isLoading: isLoginApplying,
-    refetch: loginApply,
-    data: user,
-  } = useQuery(["login"], signWithGoogle, {
-    enabled: false,
-  });
-
-  const getGoogleOAuthResponse = async () => {
-    const auth = getAuth();
-    getRedirectResult(auth).then((result) => {
-      // This gives you a Google Access Token. You can use it to access Google APIs.
-      // const credential = GoogleAuthProvider.credentialFromResult(result);
-      // const token = credential.accessToken;
-
-      // The signed-in user info.
-      const user = result.user;
-      console.log("user", user);
-      // IdP data available using getAdditionalUserInfo(result)
-      // ...
-      setValidateUser(user);
-    });
-  };
-
-  useEffect(() => {
-    if (isLoginApplying) {
-      getGoogleOAuthResponse();
+  const { refetch: loginApply, data: isLoginApplying } = useQuery(
+    ["login"],
+    signWithGoogle,
+    {
+      enabled: false,
     }
-  }, [isLoginApplying]);
+  );
+  console.log("is", isLoginApplying, isLoginApplying == null);
+
+  // const { data: user } = useQuery(["login"], getLoginApply, {
+  //   enabled: true,
+  //   select: (data) => {
+  //     if (data) {
+  //       let userObj = { uid: data.uid, username: data.username };
+  //       sessionStorage.setItem("shoppy", JSON.stringify(userObj));
+  //       shop.login(data);
+  //     }
+  //   },
+  // });
 
   const { refetch: logoutApply } = useQuery(["logout"], getLoginDismiss, {
     enabled: false,
@@ -74,7 +65,7 @@ export default function LoginStateBar() {
       </button>
 
       <button className="mr-2 text-xs text-slate-300" onClick={handleLogin}>
-        {user || sessionStorage.login ? "로그아웃" : "로그인"}
+        {sessionStorage.login ? "로그아웃" : "로그인"}
       </button>
     </div>
   );

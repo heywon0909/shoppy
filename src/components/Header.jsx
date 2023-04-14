@@ -16,7 +16,7 @@ export default function Header() {
       enabled: false,
       onSuccess: (data) => {
         console.log("data", data);
-        setValidateUser(data);
+        // setValidateUser(data);
       },
     }
   );

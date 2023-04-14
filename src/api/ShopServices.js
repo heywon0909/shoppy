@@ -47,13 +47,14 @@ export const signWithGoogle = async () => {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
   await signInWithRedirect(auth, provider);
+  return true;
 };
 export const getLoginApply = async () => {
   let user = null;
   try {
     const auth = getAuth();
     user = await getRedirectResult(auth).then((result) => {
-      return result.user
+      return result?.user;
     });
     console.log("user", user);
 
@@ -70,6 +71,7 @@ export const getLoginApply = async () => {
     //   });
     //   console.log("user", user);
     //   return user;
+    return user;
   } catch (error) {
     console.log(error);
   } finally {

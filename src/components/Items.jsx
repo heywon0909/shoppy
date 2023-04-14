@@ -1,10 +1,11 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import Item from "./Item";
-import { getItems } from "../api/ShopServices";
+import { useLoginApi } from "../context/LoginContext";
 
 export default function Items() {
-  const { isLoading, data } = useQuery(["items"], getItems, {
+  const { shop } = useLoginApi();
+  const { isLoading, data } = useQuery(["items"], () => shop.getItem(), {
     staleTime: 1000 * 60 * 1,
   });
 
