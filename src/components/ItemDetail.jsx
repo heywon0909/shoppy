@@ -21,23 +21,23 @@ export default function ItemDetail() {
   } = useQuery(["exist"], () => shop.getItem(id), {
     enabled: false,
     select: (data) => {
-      console.log("data", data);
       const interest = data?.filter((item) => item.id === id);
       return interest;
     },
   });
 
   useEffect(() => {
-    console.log("타니");
     const stored = JSON.parse(sessionStorage.shoppy);
-
     const userId = stored?.uid;
-    console.log("store", stored, userId, id);
-    if (userId && id) {
+    const initItemDetail = (stored, userID) => {
       shop.login(stored);
       readingItem(id, userId);
+    };
+
+    if (userId && id) {
+      initItemDetail();
     }
-  }, [id, readingItem]);
+  }, [id, readingItem, shop]);
 
   const { isLoading, data } = useQuery(["itemDetail"], () => getItem(id));
   const { isSuccess: isAddingSuccess, refetch: onAddInterest } = useQuery(

@@ -11,6 +11,9 @@ export default class Shop {
   async onAddInterest(login, item) {
     return this.apiClient.addInterest(login, item);
   }
+  async init(user) {
+    return this.apiClient.init(user);
+  }
   async login(user) {
     return this.apiClient.init(user);
   }
