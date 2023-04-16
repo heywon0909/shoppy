@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { getMyInterest } from "../api/ShopServices";
 import { useLoginApi } from "../context/LoginContext";
 export default function MyInterest() {
-  const { login } = useLoginApi();
-  const { isLoading, data: items } = useQuery(["myInterest"], () =>
-    getMyInterest(null, login.uid)
-  );
-  console.log("isLoading", isLoading, items);
+  const { shop } = useLoginApi();
+  const { isLoading, data: items } = useQuery(["myInterest"], () => {
+    const stored = JSON.parse(sessionStorage.shoppy);
+    shop.init(stored);
+    return shop.getItem('myInterest');
+  });
+  
   return (
     <div className="w-full flex flex-wrap h-full p-2">
       {!isLoading &&

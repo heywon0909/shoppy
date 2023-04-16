@@ -8,6 +8,18 @@ export default class ShopClient {
   constructor() {
     this.itemsCollection = collection(db, "shop", "list", "items");
   }
+  auth(user) {
+    this.#user = user;
+  }
+  #initBuyCollection(user) {
+     this.#userBuyCollection = doc(db, "buy", user?.uid);
+  }
+  #initInterestCollection(user) {
+    this.#userInterestCollection = doc(db, "interest", user?.uid);
+  }
+  #initBuyingCollection(user) {
+    this.#userBuyingCollection = doc(db, "buying", user?.uid);
+  }
   init(user) {
     this.#user = user;
     this.#userBuyCollection = doc(db, "buy", user?.uid);
