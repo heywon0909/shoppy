@@ -5,7 +5,7 @@ export default function Home() {
     <div className="w-full h-screen flex flex-col" id="grid">
       <div className="w-full h-4/6 relative">
         <img
-          src="../assets/image/main.jpg"
+          src="/assets/image/main.jpg"
           alt="mainimage"
           className="w-full h-full"
         />
