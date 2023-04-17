@@ -1,36 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { buyItem, getBuyingItem } from "../api/ShopServices";
 import { useLoginApi } from "../context/LoginContext";
-import { useLocation } from "react-router-dom";
-import ShopItem from "./ShopItem";
+export default function MyShopping({ route }) {
+  const id = route.replace("/myPage/order/new/", "")?.split("&");
 
-export default function MyShopping() {
-  const { pathname } = useLocation();
-  const [id, setId] = useState([]);
-  useEffect(() => {
-    setId(pathname.replace("/myPage/order/new/", "")?.split("&"));
-  }, [pathname]);
-
-  const { login } = useLoginApi();
-
-  const {
-    isLoading,
-    data: items,
-    refetch: getBuyItems,
-  } = useQuery(["getBuying"], () => getBuyingItem(login?.uid), {
-    enabled: false,
-    select: (data) => {
-      return data?.filter((item) => id.includes(item.id));
-    },
-  });
-  if (id) {
-    getBuyItems(login?.uid);
-  }
+  const { shop } = useLoginApi();
+  const stored = JSON.parse(sessionStorage.getItem("shoppy"));
+  const { isLoading, data: items } = useQuery(
+    ["getBuying"],
+    () => shop.getBuying(stored),
+    {
+      select: (data) => {
+        return data?.filter((item) => id.includes(item.id));
+      },
+    }
+  );
 
   const { refetch: onBuyItem } = useQuery(
     ["getBuy"],
-    () => buyItem(items, login),
+    () => shop.buyItem(stored, items),
     {
       enabled: false,
       onSuccess: (data) => {
@@ -38,7 +26,7 @@ export default function MyShopping() {
       },
     }
   );
-  console.log("isLoading", isLoading, items);
+
   return (
     <div className="p-2 grow-0 flex flex-wrap">
       <div className="w-full p-2 flex flex-col">
@@ -76,7 +64,9 @@ export default function MyShopping() {
                       </div>
                     </td>
                     <td>
-                      <div className="text-sm p-2 h-24 text-center">1개</div>
+                      <div className="text-sm p-2 h-24 text-center">
+                        {item.count}개
+                      </div>
                     </td>
                     <td>
                       <div className="text-sm p-2 h-24 text-center">
@@ -91,7 +81,7 @@ export default function MyShopping() {
         <div className="w-full flex justify-center p-2 mt-2">
           <button
             className="md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"
-            onClick={() => onBuyItem(items, login)}
+            onClick={() => onBuyItem(stored, items)}
           >
             결제하기
           </button>

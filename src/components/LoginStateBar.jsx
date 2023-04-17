@@ -11,61 +11,48 @@ import {
   signWithGoogle,
 } from "../api/ShopServices";
 export default function LoginStateBar() {
-  const { shop, login, setValidateUser } = useLoginApi();
+  const { shop } = useLoginApi();
   console.log("shop", shop);
   const navigate = useNavigate();
 
-  const { refetch: loginApply, data: isLoginApplying } = useQuery(
-    ["login"],
-    signWithGoogle,
-    {
-      enabled: false,
-      select: (data) => {
-        console.log('1',data)
-      }
-    }
+  const { refetch: loginApply } = useQuery(["login"], signWithGoogle, {
+    enabled: false,
+    select: (data) => {
+      console.log("1", data);
+    },
+  });
+
+  let isTrue = Object.keys(sessionStorage).find((key) =>
+    key.includes("pendingRedirect")
   );
-  const { data: user,refetch:getGoolgleLogin } = useQuery(["login"], getLoginApply, {
-    enabled: !!isLoginApplying,
+
+  const { data: user } = useQuery(["login"], getLoginApply, {
+    enabled: !!isTrue,
     select: (data) => {
       if (data) {
-        let userObj = { uid: data.uid, username: data.username };
+        let userObj = { uid: data.uid, username: data.displayName };
         sessionStorage.setItem("shoppy", JSON.stringify(userObj));
         shop.auth(data);
       }
     },
   });
 
-
-  useEffect(() => {
-    const getRedirectLogin = () => {
-      let isTrue = Object.keys(sessionStorage).find((key) => key.includes('pendingRedirect'));
-      return isTrue == null ? false : true;
-    }
-    if (getRedirectLogin()) {
-      console.log('계속 호출?')
-      getGoolgleLogin();
-    }
-  
-  }, [getGoolgleLogin]);
-
   const { refetch: logoutApply } = useQuery(["logout"], getLoginDismiss, {
     enabled: false,
     onSuccess: () => {
-      setValidateUser("");
+      sessionStorage.removeItem("shoppy");
       navigate("./");
     },
   });
-
+  const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const handleLogin = () => {
-    if (login) logoutApply();
+    if (stored) logoutApply();
     else {
       loginApply();
     }
   };
 
   const checkValidateUser = () => {
-    const stored = JSON.parse(sessionStorage.shoppy);
     if (stored) navigate("secured/mypage/myPage");
     else getLoginApply();
   };

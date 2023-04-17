@@ -9,6 +9,18 @@ import UserShopInfo from "../components/UserShopInfo";
 export default function MyPage() {
   let location = useLocation();
   const { pathname } = location;
+  const MyPageTitle = () => {
+    if (pathname.includes("secured")) return "마이페이지";
+    if (pathname.includes("cart")) return "장바구니";
+    if (pathname.includes("Wish")) return "위시리스트";
+    if (pathname.includes("new")) return "결제하기";
+  };
+  const MyPageComponent = () => {
+    if (pathname.includes("secured")) return <UserShopInfo />;
+    if (pathname.includes("cart")) return <MyCart />;
+    if (pathname.includes("Wish")) return <MyInterest />;
+    if (pathname.includes("new")) return <MyShopping route={pathname} />;
+  };
   return (
     <div className="flex justify-center p-2">
       <div className="md:w-2/3 w-full flex p-2 flex-wrap justify-center">
@@ -21,15 +33,9 @@ export default function MyPage() {
                 : "w-full h-7 flex justify-center font-semibold"
             }
           >
-            {pathname.includes("secured") ? "마이페이지" : ""}
-            {pathname.includes("cart") ? "장바구니" : ""}
-            {pathname.includes("Wish") ? "위시리스트" : ""}
-            {pathname.includes("new") ? "결제하기" : ""}
+            <MyPageTitle />
           </div>
-          {pathname.includes("secured") ? <UserShopInfo /> : ""}
-          {pathname.includes("cart") ? <MyCart /> : ""}
-          {pathname.includes("Wish") ? <MyInterest /> : ""}
-          {pathname.includes("new") ? <MyShopping /> : ""}
+          <MyPageComponent />
         </div>
       </div>
     </div>

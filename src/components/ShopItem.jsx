@@ -2,20 +2,19 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
-import { delBuyingItem } from "../api/ShopServices";
 import { useLoginApi } from "../context/LoginContext";
 export default function ShopItem({ item }) {
   const { id, price, title, snippet } = item;
   const navigate = useNavigate();
-  const { login } = useLoginApi();
+  const { shop } = useLoginApi();
+  const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const { refetch: onDelItems } = useQuery(
     ["onDelBuying"],
-    () => delBuyingItem(item, login),
+    () => shop.delBuying(stored, item),
     {
       enabled: false,
     }
   );
-  const handleClose = () => onDelItems(item, login);
 
   return (
     <tr className="border-b border-zinc-300 relative">
@@ -42,7 +41,7 @@ export default function ShopItem({ item }) {
           <IoMdClose
             className="text-slate-500"
             size="15"
-            onClick={handleClose}
+            onClick={() => onDelItems(stored, item)}
           />
         </button>
         <div className="text-sm p-2 h-24 text-center">{price}원</div>

@@ -1,65 +1,39 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import { useLoginApi } from "../context/LoginContext";
-import {
-  addBuyingItem,
-  delMyInterest,
-  getItem,
-  getMyInterest,
-  setMyInterest,
-} from "../api/ShopServices";
-export default function ItemDetail() {
-  const { id } = useParams();
-  const { shop, login } = useLoginApi();
-
+import { addBuyingItem } from "../api/ShopServices";
+export default function ItemDetail({ id, data, isLoading }) {
+  const { shop } = useLoginApi();
+  const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const {
     isLoading: isInterest,
     data: interest,
     refetch: readingItem,
-  } = useQuery(["exist"], () => shop.getItem(id), {
-    enabled: false,
-    select: (data) => {
-      const interest = data?.filter((item) => item.id === id);
-      return interest;
-    },
+  } = useQuery(["exist"], () => shop.getInterest(stored, id), {
+    enabled: !!stored,
   });
 
-  useEffect(() => {
-    const stored = JSON.parse(sessionStorage.shoppy);
-    const userId = stored?.uid;
-    const initItemDetail = (stored, userID) => {
-      shop.login(stored);
-      readingItem(id, userId);
-    };
-
-    if (userId && id) {
-      initItemDetail();
-    }
-  }, [id, readingItem, shop]);
-
-  const { isLoading, data } = useQuery(["itemDetail"], () => getItem(id));
   const { isSuccess: isAddingSuccess, refetch: onAddInterest } = useQuery(
     ["AddInterest"],
-    () => setMyInterest(data, login),
+    () => shop.addInterest(stored, data),
     { enabled: false }
   );
 
   const { isSuccess: isDeleteSuccess, refetch: onDelInterest } = useQuery(
     ["onDeleteInterest"],
-    () => delMyInterest(data, login),
+    () => shop.delInterest(stored, data),
     {
       enabled: false,
     }
   );
   if (isDeleteSuccess || isAddingSuccess) {
-    readingItem(id, login?.uid);
+    readingItem(id, stored?.uid);
   }
 
   const { isSuccess: isAddBuying, refetch: onAddBuying } = useQuery(
     ["onAddBuying"],
-    () => addBuyingItem(data, login),
+    () => shop.addBuying(stored, data),
     {
       enabled: false,
     }
@@ -70,7 +44,7 @@ export default function ItemDetail() {
 
   return (
     <section className="flex justify-center p-2">
-      {!isLoading && (
+      {!isLoading && data && (
         <article className="w-full max-w-screen-xl flex p-2 justify-center flex-wrap">
           <div className="xl:w-3/6 w-full h-auto">
             <img
@@ -87,9 +61,9 @@ export default function ItemDetail() {
             <div className="p-2 border-b border-zinc-300 flex">
               <div className="pt-1">
                 {!isInterest && interest?.length > 0 ? (
-                  <BsHeartFill onClick={() => onDelInterest(data, login)} />
+                  <BsHeartFill onClick={() => onDelInterest(stored, data)} />
                 ) : (
-                  <BsHeart onClick={() => onAddInterest(data, login)} />
+                  <BsHeart onClick={() => onAddInterest(stored, data)} />
                 )}
               </div>
               {/* <p className='ml-2 pb-1 text-sm font-semibold text-zinc-500'>{data.heart}+</p> */}
@@ -100,7 +74,7 @@ export default function ItemDetail() {
               <div className="w-full flex items-stretch p-2">
                 <button
                   className="w-full bg-slate-700 text-white p-2 mr-2"
-                  onClick={() => onAddBuying(id, login)}
+                  onClick={() => onAddBuying(id, stored)}
                 >
                   장바구니
                 </button>

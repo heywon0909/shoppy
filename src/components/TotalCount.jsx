@@ -1,12 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-export default function TotalCount({ sum }) {
-  const { total, discountSum, items } = sum;
-  const [buyTotal, setBuyTotal] = useState(0);
+export default function TotalCount({ items }) {
   const navigate = useNavigate();
-  useEffect(() => {
-    return setBuyTotal(sum.total - sum.discountSum + 2500);
-  }, [sum]);
+
+  const setShopTotal = useCallback((items) => {
+    let count = { total: 0, discountSum: 0, buyItems: [] };
+    if (!items) return;
+    Object.values(items).forEach((item) => {
+      const { price, snippet } = item;
+      count.total += price;
+      count.discountSum += (snippet.discount / 100) * price;
+      count.buyItems.push(item.id);
+    });
+    return count;
+  }, []);
+
+  const sum = useMemo(() => setShopTotal(items), [items, setShopTotal]);
+  const { total, discountSum, buyItems } = sum;
   return (
     <div className="w-full flex flex-col mt-10 border-t border-zinc-600 space-y-3">
       <div className="w-full flex border-b border-zinc-300 text-sm p-2">
@@ -38,7 +48,9 @@ export default function TotalCount({ sum }) {
         </div>
         <div className="w-5">=</div>
         <div className="w-full flex flex-col justify-center">
-          <div className="flex justify-center">{buyTotal}원</div>
+          <div className="flex justify-center">
+            {total - discountSum + 2500}원
+          </div>
           <div className="text-xs text-zinc-600 flex justify-center">
             상품금액
           </div>
@@ -48,7 +60,7 @@ export default function TotalCount({ sum }) {
         <button
           className="md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"
           onClick={() =>
-            navigate("/myPage/order/new/" + String(items?.join("&")))
+            navigate("/myPage/order/new/" + String(buyItems?.join("&")))
           }
         >
           바로구매
