@@ -3,6 +3,7 @@ import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
 import { useShopApi } from "context/ShopContext";
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 export default function ItemDetail({ id, data, isLoading }) {
   const { shop } = useShopApi();
   const navigate = useNavigate();
@@ -32,16 +33,15 @@ export default function ItemDetail({ id, data, isLoading }) {
     readingItem(id, stored?.uid);
   }
 
-  const { isSuccess: isAddBuying, refetch: onAddBuying } = useQuery(
+  const { refetch: onAddBuying } = useQuery(
     ["onAddBuying"],
     () => shop.addBuying(stored, data),
     {
+      onSuccess:() => {toast.success("장바구니에 추가되었습니다.")},
       enabled: false,
     }
   );
-  if (isAddBuying) {
-    console.log("팝업창 구성중..");
-  }
+ 
 
   return (
     <section className="flex justify-center p-2">

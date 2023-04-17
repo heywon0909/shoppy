@@ -1,6 +1,6 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Root from "./pages/Root";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -27,7 +27,12 @@ function App() {
   return (
     <>
       <RouterProvider router={router} />
-      <ToastContainer />
+      <ToastContainer
+        position="top-center"
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   );
 }

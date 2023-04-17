@@ -4,34 +4,17 @@ import { BsHeart } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useShopApi } from "context/ShopContext";
+import { toast } from 'react-toastify';
 export default function Header() {
   const navigate = useNavigate();
   const goHome = () => navigate("/");
-  const { shop } = useShopApi();
+
  
 
-  const { refetch: loginApply } = useQuery(["loginRedirect"], ()=>shop.loginToGoogle(), {
-    enabled: false,
-  });
-
-  let isTrue = Object.keys(sessionStorage).find((key) =>
-    key.includes("pendingRedirect")
-  );
-
-  const { isSuccess: isLoginSuccess } = useQuery(["login"], ()=>shop.login(), {
-    enabled: !!isTrue,
-    select: (data) => {
-      if (data) {
-        let userObj = { uid: data.uid, username: data.displayName };
-        sessionStorage.setItem("shoppy", JSON.stringify(userObj));
-        shop.auth(data);
-      }
-    },
-  });
 
   const goMyPage = (type) => {
-    let isTrue = sessionStorage.getItem('shoppy') || isLoginSuccess;
-    if (!isTrue) return loginApply();
+    let isTrue = sessionStorage.getItem('shoppy');
+    if (!isTrue) return toast.error('로그인 후 이용해주세요');
     if (type === "buying") {
       return navigate("/myPage/order/cart");
     } else if (type === "interest") {
