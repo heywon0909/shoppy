@@ -43,14 +43,9 @@ export default function LoginStateBar() {
   };
 
   const checkValidateUser = () => {
-<<<<<<< HEAD
-    if (stored) navigate("secured/mypage/myPage");
-    else loginApply();
-=======
     const stored = JSON.parse(sessionStorage.shoppy);
     if (stored) navigate("secured/mypage/myPage");
-    else getLoginApply();
->>>>>>> 11edf6a (login api -> shoppy 메소드로 변경)
+    else loginApply();
   };
 
   return (
@@ -63,11 +58,7 @@ export default function LoginStateBar() {
       </button>
 
       <button className="mr-2 text-xs text-slate-300" onClick={handleLogin}>
-<<<<<<< HEAD
         {isLoginSuccess || sessionStorage.getItem('shoppy') ? "로그아웃" : "로그인"}
-=======
-        {user || sessionStorage.shoppy ? "로그아웃" : "로그인"}
->>>>>>> 11edf6a (login api -> shoppy 메소드로 변경)
       </button>
     </div>
   );
