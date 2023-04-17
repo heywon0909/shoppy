@@ -1,4 +1,4 @@
-# HW Shoppy 앱 [토이프로젝트] 👗
+# HW Shoppy 앱 👗
 
 React를 공부하면서 제작한 쇼핑몰[HW-Shoppy] 웹뷰 입니다. 🙌
 
