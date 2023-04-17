@@ -8,7 +8,7 @@ export default function TotalCount({ items }) {
     if (!items) return;
     Object.values(items).forEach((item) => {
       const { price, snippet } = item;
-      count.total += price;
+      count.total += parseInt(price);
       count.discountSum += (snippet.discount / 100) * price;
       count.buyItems.push(item.id);
     });

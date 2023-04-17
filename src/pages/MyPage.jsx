@@ -1,10 +1,10 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import MyPageNav from "../components/MyPageNav";
-import MyCart from "../components/MyCart";
-import MyShopping from "../components/MyShopping";
-import MyInterest from "../components/MyInterest";
-import UserShopInfo from "../components/UserShopInfo";
+import MyPageNav from "components/MyPageNav";
+import MyCart from "components/MyCart";
+import MyShopping from "components/MyShopping";
+import MyInterest from "components/MyInterest";
+import UserShopInfo from "components/UserShopInfo";
 
 export default function MyPage() {
   let location = useLocation();

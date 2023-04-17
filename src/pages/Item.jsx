@@ -1,7 +1,7 @@
 import React from "react";
-import ItemDetail from "../components/ItemDetail";
+import ItemDetail from "components/ItemDetail";
 import { useParams } from "react-router-dom";
-import { useLoginApi } from "../context/LoginContext";
+import { useLoginApi } from "context/LoginContext";
 import { useQuery } from "@tanstack/react-query";
 export default function Item() {
   const { id } = useParams();

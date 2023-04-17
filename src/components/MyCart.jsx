@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useLoginApi } from "../context/LoginContext";
+import { useLoginApi } from "context/LoginContext";
 import TotalCount from "./TotalCount";
 import MyCartItems from "./MyCartItems";
 

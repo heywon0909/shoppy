@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useLoginApi } from "../context/LoginContext";
+import { useLoginApi } from "context/LoginContext";
 export default function MyInterest() {
   const { shop } = useLoginApi();
   const { isLoading, data: items } = useQuery(["myInterest"], () => {

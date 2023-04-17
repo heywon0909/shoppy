@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import Item from "./Item";
-import { useLoginApi } from "../context/LoginContext";
+import { useLoginApi } from "context/LoginContext";
 
 export default function Items() {
   const { shop } = useLoginApi();

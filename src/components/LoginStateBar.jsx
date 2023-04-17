@@ -1,32 +1,22 @@
-import React, { useEffect } from "react";
+import React  from "react";
 // import CryptoJS from "crypto-js";
 // import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useLoginApi } from "../context/LoginContext";
+import { useLoginApi } from "context/LoginContext";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getAuth, GoogleAuthProvider, getRedirectResult } from "firebase/auth";
-import {
-  getLoginApply,
-  getLoginDismiss,
-  signWithGoogle,
-} from "../api/ShopServices";
 export default function LoginStateBar() {
   const { shop } = useLoginApi();
-  console.log("shop", shop);
   const navigate = useNavigate();
 
-  const { refetch: loginApply } = useQuery(["login"], signWithGoogle, {
+  const { refetch: loginApply } = useQuery(["loginRedirect"], ()=>shop.loginToGoogle(), {
     enabled: false,
-    select: (data) => {
-      console.log("1", data);
-    },
   });
 
   let isTrue = Object.keys(sessionStorage).find((key) =>
     key.includes("pendingRedirect")
   );
 
-  const { data: user } = useQuery(["login"], getLoginApply, {
+  const { isSuccess:isLoginSuccess } = useQuery(["login"], ()=>shop.login(), {
     enabled: !!isTrue,
     select: (data) => {
       if (data) {
@@ -37,7 +27,7 @@ export default function LoginStateBar() {
     },
   });
 
-  const { refetch: logoutApply } = useQuery(["logout"], getLoginDismiss, {
+  const { refetch: logoutApply } = useQuery(["logout"], ()=>shop.logout(), {
     enabled: false,
     onSuccess: () => {
       sessionStorage.removeItem("shoppy");
@@ -54,7 +44,7 @@ export default function LoginStateBar() {
 
   const checkValidateUser = () => {
     if (stored) navigate("secured/mypage/myPage");
-    else getLoginApply();
+    else loginApply();
   };
 
   return (
@@ -67,7 +57,7 @@ export default function LoginStateBar() {
       </button>
 
       <button className="mr-2 text-xs text-slate-300" onClick={handleLogin}>
-        {user || sessionStorage.shoppy ? "로그아웃" : "로그인"}
+        {isLoginSuccess || sessionStorage.getItem('shoppy') ? "로그아웃" : "로그인"}
       </button>
     </div>
   );

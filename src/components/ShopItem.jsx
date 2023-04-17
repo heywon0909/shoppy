@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
-import { useLoginApi } from "../context/LoginContext";
+import { useLoginApi } from "context/LoginContext";
 export default function ShopItem({ item }) {
   const { id, price, title, snippet } = item;
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export default function ShopItem({ item }) {
         <div className="flex p-2">
           <div className=" h-32 w-24 bg-slate-300">
             <img
-              src={`../${snippet.url}`}
+              src={snippet.url}
               alt={title}
               className="w-full h-32"
             />

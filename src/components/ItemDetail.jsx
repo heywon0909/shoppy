@@ -1,10 +1,11 @@
 import React from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
-import { useLoginApi } from "../context/LoginContext";
-import { addBuyingItem } from "../api/ShopServices";
+import { useLoginApi } from "context/LoginContext";
+import { useNavigate } from 'react-router-dom';
 export default function ItemDetail({ id, data, isLoading }) {
   const { shop } = useLoginApi();
+  const navigate = useNavigate();
   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const {
     isLoading: isInterest,
@@ -78,7 +79,7 @@ export default function ItemDetail({ id, data, isLoading }) {
                 >
                   장바구니
                 </button>
-                <button className="w-full bg-purple-500 text-white p-2">
+                <button className="w-full bg-purple-500 text-white p-2" onClick={()=>navigate('/myPage/order/new/'+id)}>
                   바로구매
                 </button>
               </div>

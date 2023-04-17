@@ -1,6 +1,6 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useLoginApi } from "../context/LoginContext";
+import { useLoginApi } from "context/LoginContext";
 export default function MyShopping({ route }) {
   const id = route.replace("/myPage/order/new/", "")?.split("&");
 
@@ -8,7 +8,7 @@ export default function MyShopping({ route }) {
   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const { isLoading, data: items } = useQuery(
     ["getBuying"],
-    () => shop.getBuying(stored),
+    () => shop.getItem(),
     {
       select: (data) => {
         return data?.filter((item) => id.includes(item.id));

@@ -1,5 +1,5 @@
 import React from "react";
-import Items from "../components/Items";
+import Items from "components/Items";
 export default function Home() {
   return (
     <div className="w-full h-screen flex flex-col" id="grid">

@@ -39,16 +39,16 @@ export default class Shop {
   async buyItem(user, item) {
     return await this.apiClient.setRealBuy(user, item);
   }
-  async #showAll() {
-    return this.apiClient.getItems();
-  }
   async auth(user) {
     return this.apiClient.init(user);
   }
-  async login(user) {
-    return this.apiClient.init(user);
+  async login() {
+    return this.apiClient.signWithGoogleLogin();
   }
   async logout() {
-    return this.apiClient.getLoginDismiss();
+    return this.apiClient.logoutWithGoogleLogin();
+  }
+  async loginToGoogle() {
+    return this.apiClient.signWithGoogle();
   }
 }

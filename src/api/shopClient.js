@@ -1,3 +1,4 @@
+import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithRedirect } from 'firebase/auth';
 import { db } from "../firebase/firebase";
 import {
   collection,
@@ -18,6 +19,21 @@ export default class ShopClient {
   #user = null;
   constructor() {
     this.itemsCollection = collection(db, "shop", "list", "items");
+  }
+  async signWithGoogle() {
+    const auth = getAuth();
+    const provider = new GoogleAuthProvider();
+    await signInWithRedirect(auth, provider);
+    return true;
+  }
+  async signWithGoogleLogin() {
+    const auth = getAuth();
+    return await getRedirectResult(auth).then(result => result?.user);
+  }
+  async logoutWithGoogleLogin() {
+    const auth = getAuth();
+    auth.signOut();
+    return true;
   }
   auth(user) {
     this.#user = user;
