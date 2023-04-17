@@ -1,11 +1,11 @@
 import React  from "react";
 // import CryptoJS from "crypto-js";
 // import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { useLoginApi } from "context/LoginContext";
+import { useShopApi } from "context/ShopContext";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 export default function LoginStateBar() {
-  const { shop } = useLoginApi();
+  const { shop } = useShopApi();
   const navigate = useNavigate();
 
   const { refetch: loginApply } = useQuery(["loginRedirect"], ()=>shop.loginToGoogle(), {

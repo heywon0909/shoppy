@@ -3,11 +3,11 @@ import { SlHandbag } from "react-icons/sl";
 import { BsHeart } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useLoginApi } from "context/LoginContext";
+import { useShopApi } from "context/ShopContext";
 export default function Header() {
   const navigate = useNavigate();
   const goHome = () => navigate("/");
-  const { shop } = useLoginApi();
+  const { shop } = useShopApi();
  
 
   const { refetch: loginApply } = useQuery(["loginRedirect"], ()=>shop.loginToGoogle(), {

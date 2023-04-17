@@ -1,11 +1,11 @@
 import React from "react";
 import ItemDetail from "components/ItemDetail";
 import { useParams } from "react-router-dom";
-import { useLoginApi } from "context/LoginContext";
+import { useShopApi } from "context/ShopContext";
 import { useQuery } from "@tanstack/react-query";
 export default function Item() {
   const { id } = useParams();
-  const { shop } = useLoginApi();
+  const { shop } = useShopApi();
   const { isLoading, data } = useQuery(["itemDetail"], () => shop.getItem(id));
   return (
     <>

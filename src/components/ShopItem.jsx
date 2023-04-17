@@ -2,11 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { IoMdClose } from "react-icons/io";
-import { useLoginApi } from "context/LoginContext";
+import { useShopApi } from "context/ShopContext";
 export default function ShopItem({ item }) {
   const { id, price, title, snippet } = item;
   const navigate = useNavigate();
-  const { shop } = useLoginApi();
+  const { shop } = useShopApi();
   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const { refetch: onDelItems } = useQuery(
     ["onDelBuying"],

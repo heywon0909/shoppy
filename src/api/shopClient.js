@@ -4,8 +4,6 @@ import {
   collection,
   doc,
   getDocs,
-  query,
-  where,
   setDoc,
   getDoc,
   updateDoc,

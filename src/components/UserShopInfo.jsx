@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { getBuyItem } from "api/ShopServices";
-import { useLoginApi } from "context/LoginContext";
+import { useShopApi } from "context/ShopContext";
 export default function UserShopInfo() {
-  const { login } = useLoginApi();
+  const { login } = useShopApi();
   const { isLoading, data } = useQuery(["buyItems"], () =>
     getBuyItem(login?.uid)
   );

@@ -1,10 +1,10 @@
 import React from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
-import { useLoginApi } from "context/LoginContext";
+import { useShopApi } from "context/ShopContext";
 import { useNavigate } from 'react-router-dom';
 export default function ItemDetail({ id, data, isLoading }) {
-  const { shop } = useLoginApi();
+  const { shop } = useShopApi();
   const navigate = useNavigate();
   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const {
