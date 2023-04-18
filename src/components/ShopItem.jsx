@@ -1,59 +1,81 @@
-import { useQuery } from "@tanstack/react-query";
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { IoMdClose } from "react-icons/io";
 import { useShopApi } from "context/ShopContext";
-export default function ShopItem({ item }) {
-  const { id, price, title, snippet } = item;
+import React, { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import CloseBut from "./CloseBut";
+import { toast } from "react-toastify";
+import GoBuyLink from "./GoBuyLink";
+import AddBut from "./AddBut";
+export default function ShopItem({ item, onClose }) {
+  const { count, title, snippet } = item;
   const navigate = useNavigate();
+
   const { shop } = useShopApi();
-  const stored = JSON.parse(sessionStorage.getItem("shoppy"));
-  const { refetch: onDelItems } = useQuery(
-    ["onDelBuying"],
-    () => shop.delBuying(stored, item),
-    {
-      enabled: false,
-    }
+
+  const handleDelete = useCallback(
+    async (item) => {
+      const stored = JSON.parse(sessionStorage.getItem("shoppy"));
+      try {
+        const result = await shop.delBuying(stored, item);
+        console.log("item", item, result);
+        if (result) {
+          toast.success("장바구니에서 상품이 삭제되었습니다", {
+            autoClose: 2000,
+          });
+          onClose();
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("오류가 발생하였습니다.");
+      }
+    },
+    [onClose, shop]
+  );
+
+  const handleAdd = useCallback(
+    async (item) => {
+      const stored = JSON.parse(sessionStorage.getItem("shoppy"));
+      try {
+        const result = await shop.updateBuying(stored, item);
+        console.log("item", item, result);
+        if (result) {
+          onClose();
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("오류가 발생하였습니다.");
+      }
+    },
+    [onClose, shop]
   );
 
   return (
-    <tr className="border-b border-zinc-300 relative">
+    <>
       <td>
         <div className="flex p-2">
           <div className=" h-32 w-24 bg-slate-300">
-            <img
-              src={snippet.url}
-              alt={title}
-              className="w-full h-32"
-            />
+            <img src={snippet.url} alt={title} className="w-full h-32" />
           </div>
           <div className="flex flex-col p-2 h-24">
             <p className="text-sm">{title}</p>
-            <div className="flex text-sm text-zinc-600 flex-wrap">1개</div>
+            <div className="flex text-sm text-zinc-600 flex-wrap">
+              {count}개
+            </div>
           </div>
         </div>
       </td>
       <td>
-        <div className="text-sm p-2 h-24 text-center">1개</div>
-      </td>
-      <td>
-        <button className="absolute right-0 top-5">
-          <IoMdClose
-            className="text-slate-500"
-            size="15"
-            onClick={() => onDelItems(stored, item)}
-          />
-        </button>
-        <div className="text-sm p-2 h-24 text-center">{price}원</div>
-        <div className="relative">
-          <button
-            className="w-full bg-slate-900 text-white p-2"
-            onClick={() => navigate("/myPage/order/new/" + id)}
-          >
-            바로구매
-          </button>
+        <div className="text-sm p-2 h-24 text-center flex">
+          {count}개
+          <AddBut item={item} handleAdd={handleAdd} />
         </div>
       </td>
-    </tr>
+      <td>
+        <CloseBut item={item} handleDelete={handleDelete} />
+        <div className="text-sm p-2 h-24 text-center">
+          {new Intl.NumberFormat("ko-KR").format(item.price)}원
+        </div>
+        <GoBuyLink item={item} />
+      </td>
+    </>
   );
 }

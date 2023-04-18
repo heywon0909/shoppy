@@ -1,4 +1,9 @@
-import { GoogleAuthProvider, getAuth, getRedirectResult, signInWithRedirect } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  getAuth,
+  getRedirectResult,
+  signInWithRedirect,
+} from "firebase/auth";
 import { db } from "../firebase/firebase";
 import {
   collection,
@@ -26,7 +31,7 @@ export default class ShopClient {
   }
   async signWithGoogleLogin() {
     const auth = getAuth();
-    return await getRedirectResult(auth).then(result => result?.user);
+    return await getRedirectResult(auth).then((result) => result?.user);
   }
   async logoutWithGoogleLogin() {
     const auth = getAuth();
@@ -154,6 +159,34 @@ export default class ShopClient {
     }
     return result == null ? true : false;
   }
+  async updateMyBuying(user, item) {
+    const docRef = this.#getFirebaseDoc("buying", user);
+    let result = null;
+    let update_result = null;
+    result = await updateDoc(docRef, {
+      items: arrayRemove({
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        count: item.count,
+        snippet: { ...item.snippet },
+      }),
+    });
+    if (result == null) {
+      update_result = await updateDoc(docRef, {
+        id: user.uid,
+        username: user.username,
+        items: arrayUnion({
+          id: item.id,
+          title: item.title,
+          price: item.price,
+          count: item.count + 1,
+          snippet: { ...item.snippet },
+        }),
+      });
+    }
+    return update_result == null ? true : false;
+  }
   async delMyBuying(user, item) {
     const docRef = this.#getFirebaseDoc("buying", user);
     let result = null;
@@ -162,6 +195,7 @@ export default class ShopClient {
         id: item.id,
         title: item.title,
         price: item.price,
+        count: item.count,
         snippet: { ...item.snippet },
       }),
     });

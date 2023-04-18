@@ -2,19 +2,15 @@ import React from "react";
 import { SlHandbag } from "react-icons/sl";
 import { BsHeart } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { useShopApi } from "context/ShopContext";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 export default function Header() {
   const navigate = useNavigate();
   const goHome = () => navigate("/");
 
- 
-
-
   const goMyPage = (type) => {
-    let isTrue = sessionStorage.getItem('shoppy');
-    if (!isTrue) return toast.error('로그인 후 이용해주세요');
+    let isTrue = sessionStorage.getItem("shoppy");
+    if (!isTrue)
+      return toast.error("로그인 후 이용해주세요", { autoClose: 2000 });
     if (type === "buying") {
       return navigate("/myPage/order/cart");
     } else if (type === "interest") {

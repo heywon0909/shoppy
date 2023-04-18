@@ -30,6 +30,8 @@ function App() {
       <ToastContainer
         position="top-center"
         pauseOnFocusLoss
+        autoClose={false}
+        closeOnClick
         draggable
         pauseOnHover
       />

@@ -2,25 +2,46 @@ import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useShopApi } from "context/ShopContext";
 import TotalCount from "./TotalCount";
-import MyCartItems from "./MyCartItems";
+import ShopItem from "./ShopItem";
 
 export default function MyCart() {
   const { shop } = useShopApi();
 
-  const { data: items } = useQuery(["getBuying"], () => {
-    const stored = JSON.parse(sessionStorage.getItem("shoppy"));
-    return shop.getBuying(stored);
-  });
+  const { data: items, refetch: getBuyingItems } = useQuery(
+    ["getBuying"],
+    () => {
+      const stored = JSON.parse(sessionStorage.getItem("shoppy"));
+      return shop.getBuying(stored);
+    }
+  );
 
-  const buyItemInfo = items
-    ? [
-        <MyCartItems items={items} key="myCartItems" />,
-        <TotalCount items={items} key="totalCount" />,
-      ]
-    : null;
   return (
     <div className="p-2 grow-0 flex flex-wrap">
-      <div className="w-full p-2 flex flex-col">{buyItemInfo}</div>
+      <div className="w-full p-2 flex flex-col">
+        <table className="table-auto text-sm">
+          <thead className="border-b border-zinc-600 pb-3">
+            <tr>
+              <th>상품정보</th>
+              <th>수량</th>
+              <th>주문금액</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items &&
+              items.map((item) => {
+                return (
+                  <tr
+                    className="border-b border-zinc-300 relative"
+                    key={item.id}
+                  >
+                    <ShopItem item={item} onClose={getBuyingItems} />
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
+        {items ? <TotalCount items={items} key="totalCount" /> : null}
+      </div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useShopApi } from "context/ShopContext";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 export default function MyShopping({ route }) {
   const id = route.replace("/myPage/order/new/", "")?.split("&");
 
@@ -23,7 +23,7 @@ export default function MyShopping({ route }) {
     {
       enabled: false,
       onSuccess: (data) => {
-        toast.success("결제가 완료되었습니다.")
+        toast.success("결제가 완료되었습니다.", { autoClose: 2000 });
       },
     }
   );

@@ -2,8 +2,8 @@ import React from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
 import { useShopApi } from "context/ShopContext";
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 export default function ItemDetail({ id, data, isLoading }) {
   const { shop } = useShopApi();
   const navigate = useNavigate();
@@ -37,11 +37,12 @@ export default function ItemDetail({ id, data, isLoading }) {
     ["onAddBuying"],
     () => shop.addBuying(stored, data),
     {
-      onSuccess:() => {toast.success("장바구니에 추가되었습니다.")},
+      onSuccess: () => {
+        toast.success("장바구니에 추가되었습니다.", { autoClose: 2000 });
+      },
       enabled: false,
     }
   );
- 
 
   return (
     <section className="flex justify-center p-2">
@@ -57,7 +58,9 @@ export default function ItemDetail({ id, data, isLoading }) {
           <div className="flex flex-col p-2 h-auto xl:w-3/6">
             <div className="space-y-4 border-b border-zinc-300 pb-4">
               <p className="text-2xl">{data.title}</p>
-              <p className="text-purple-500 text-2xl">{data.price}</p>
+              <p className="text-purple-500 text-2xl">
+                {new Intl.NumberFormat("ko-KR").format(data.price)}
+              </p>
             </div>
             <div className="p-2 border-b border-zinc-300 flex">
               <div className="pt-1">
@@ -79,7 +82,10 @@ export default function ItemDetail({ id, data, isLoading }) {
                 >
                   장바구니
                 </button>
-                <button className="w-full bg-purple-500 text-white p-2" onClick={()=>navigate('/myPage/order/new/'+id)}>
+                <button
+                  className="w-full bg-purple-500 text-white p-2"
+                  onClick={() => navigate("/myPage/order/new/" + id)}
+                >
                   바로구매
                 </button>
               </div>

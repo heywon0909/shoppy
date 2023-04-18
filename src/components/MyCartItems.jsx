@@ -1,6 +1,25 @@
 import React from "react";
-import ShopItem from "./ShopItem";
-export default function MyCartItems({ items }) {
+import { useQuery } from "@tanstack/react-query";
+// import ShopItem from "./ShopItem";
+import { useNavigate } from "react-router-dom";
+import { IoMdClose } from "react-icons/io";
+import { useShopApi } from "context/ShopContext";
+export default function MyCartItems() {
+  const { shop } = useShopApi();
+  // const navigate = useNavigate();
+  const stored = JSON.parse(sessionStorage.getItem("shoppy"));
+  // const { refetch: onDelItems } = useQuery(
+  //   ["onDelBuying"],
+  //   () => {
+  //     console.log("item", stored, item);
+  //     return shop.delBuying(stored, item);
+  //   },
+  //   {
+  //     enabled: false,
+  //     onSuccess: () => onClose,
+  //   }
+  // );
+
   return (
     <table className="table-auto text-sm">
       <thead className="border-b border-zinc-600 pb-3">
@@ -10,12 +29,7 @@ export default function MyCartItems({ items }) {
           <th>주문금액</th>
         </tr>
       </thead>
-      <tbody>
-        {items &&
-          items.map((item) => {
-            return <ShopItem item={item} key={item.id} />;
-          })}
-      </tbody>
+      <tbody></tbody>
     </table>
   );
 }

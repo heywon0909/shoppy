@@ -34,7 +34,11 @@ export default class Shop {
     return await this.apiClient.setMyBuying(user, item);
   }
   async delBuying(user, item) {
+    console.log("user", user, item);
     return await this.apiClient.delMyBuying(user, item);
+  }
+  async updateBuying(user, item) {
+    return await this.apiClient.updateMyBuying(user, item);
   }
   async buyItem(user, item) {
     return await this.apiClient.setRealBuy(user, item);
