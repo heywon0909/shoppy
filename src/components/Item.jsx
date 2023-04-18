@@ -6,11 +6,14 @@ export default function Item({ item, index }) {
   const navigate = useNavigate();
   const goDetail = () => navigate(`/item/${index}`);
   return (
-    <div className="xl:w-1/4 lg:w-2/5 md:w-1/2 w-max flex flex-col" key={index}>
+    <div
+      className="xl:w-1/4 lg:w-2/5 md:w-1/2 w-max flex flex-col items-stretch"
+      key={index}
+    >
       <article className="md:p-2">
         <img
           src={snippet.url}
-          className="h-max w-full"
+          className="xl:h-96 h-max w-full"
           alt={title}
           onClick={goDetail}
         />
