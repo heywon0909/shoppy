@@ -66,7 +66,7 @@ export default function MyShopping({ route }) {
                     </td>
                     <td>
                       <div className="text-sm p-2 h-24 text-center">
-                        {item.count}개
+                        {item.count == null ? 1 : item.count}개
                       </div>
                     </td>
                     <td>

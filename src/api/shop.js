@@ -24,6 +24,9 @@ export default class Shop {
   async getBuying(user) {
     return this.apiClient.getbuyingItem(user);
   }
+  async getPurchasedItems(user) {
+    return this.apiClient.getbuyItem(user);
+  }
   async addInterest(user, item) {
     return await this.apiClient.setMyInterest(user, item);
   }

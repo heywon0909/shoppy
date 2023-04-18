@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import GoBuyLink from "./GoBuyLink";
 export default function TotalCount({ items }) {
   const navigate = useNavigate();
 
@@ -8,8 +9,9 @@ export default function TotalCount({ items }) {
     if (!items) return;
     Object.values(items).forEach((item) => {
       const { price, snippet } = item;
-      count.total += parseInt(price);
-      count.discountSum += (snippet.discount / 100) * price;
+      count.total += parseInt(price) * Number(item.count);
+      count.discountSum +=
+        (snippet.discount / 100) * price * Number(item.count);
       count.buyItems.push(item.id);
     });
     return count;
@@ -57,14 +59,10 @@ export default function TotalCount({ items }) {
         </div>
       </div>
       <div className="w-full p-2 flex justify-center">
-        <button
-          className="md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"
-          onClick={() =>
-            navigate("/myPage/order/new/" + String(buyItems?.join("&")))
-          }
-        >
-          바로구매
-        </button>
+        <GoBuyLink
+          id={String(buyItems?.join("&"))}
+          classFmt={"md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"}
+        />
       </div>
     </div>
   );

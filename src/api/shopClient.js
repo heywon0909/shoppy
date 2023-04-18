@@ -80,7 +80,7 @@ export default class ShopClient {
     return await this.#initBuyingCollection(user).then((data) => data.items);
   }
   async getbuyItem(user) {
-    return await this.#initBuyCollection(user).then((data) => data.items);
+    return await this.#initBuyCollection(user);
   }
   async setMyInterest(user, item) {
     const interestCollectionRef = this.#initInterestCollection(user);
@@ -139,6 +139,7 @@ export default class ShopClient {
             id: item.id,
             title: item.title,
             price: item.price,
+            count: 1,
             snippet: { ...item.snippet },
           },
         ],
@@ -161,7 +162,25 @@ export default class ShopClient {
   }
   async updateMyBuying(user, item) {
     const docRef = this.#getFirebaseDoc("buying", user);
+    const buyingCollectionRef = this.#initBuyingCollection(user);
     let result = null;
+    if (!buyingCollectionRef) {
+      result = await this.#setFirebaseDoc("buying", user, {
+        id: user.id,
+        username: user.displayName,
+        items: [
+          {
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            count: 1,
+            snippet: { ...item.snippet },
+          },
+        ],
+      });
+      return result == null ? true : false;
+    }
+
     let update_result = null;
     result = await updateDoc(docRef, {
       items: arrayRemove({

@@ -1,13 +1,11 @@
 import { useShopApi } from "context/ShopContext";
 import React, { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import CloseBut from "./CloseBut";
 import { toast } from "react-toastify";
 import GoBuyLink from "./GoBuyLink";
 import AddBut from "./AddBut";
 export default function ShopItem({ item, onClose }) {
   const { count, title, snippet } = item;
-  const navigate = useNavigate();
 
   const { shop } = useShopApi();
 
@@ -74,7 +72,10 @@ export default function ShopItem({ item, onClose }) {
         <div className="text-sm p-2 h-24 text-center">
           {new Intl.NumberFormat("ko-KR").format(item.price)}원
         </div>
-        <GoBuyLink item={item} />
+        <GoBuyLink
+          id={item?.id}
+          classFmt={"w-full bg-slate-900 text-white p-2"}
+        />
       </td>
     </>
   );

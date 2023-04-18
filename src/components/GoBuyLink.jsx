@@ -1,17 +1,22 @@
+import { useQuery } from "@tanstack/react-query";
+import { useShopApi } from "context/ShopContext";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function GoBuyLink({ item }) {
+export default function GoBuyLink({ id, classFmt }) {
   const navigate = useNavigate();
-
+  const { shop } = useShopApi();
+  //   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
+  //   const { refetch: addBuyingItem } = useQuery(
+  //     ["addBuying"],
+  //     () => shop.updateBuying(stored,)
+  //   );
   return (
-    <div className="relative">
-      <button
-        className="w-full bg-slate-900 text-white p-2"
-        onClick={() => navigate("/myPage/order/new/" + item.id)}
-      >
-        바로구매
-      </button>
-    </div>
+    <button
+      className={classFmt}
+      onClick={() => navigate("/myPage/order/new/" + id)}
+    >
+      바로구매
+    </button>
   );
 }
