@@ -8,7 +8,7 @@ export default function Item({ item, index }) {
 
   return (
     <div
-      className="xl:w-max lg:w-2/5 md:w-1/2 w-max flex flex-col items-stretch"
+      className="xl:w-1/4 lg:w-2/5 md:w-1/2 w-max flex flex-col items-stretch"
       key={index}
     >
       <article className="md:p-2">
