@@ -21,16 +21,14 @@ export default function LoginStateBar() {
   );
 
   const { isSuccess: isLoginSuccess } = useQuery(
-    ["login", isTrue],
+    ["login"],
     () => shop.login(),
     {
       enabled: !!isTrue,
       select: (data) => {
-        if (data) {
-          let userObj = { uid: data.uid, username: data.displayName };
-          sessionStorage.setItem("shoppy", JSON.stringify(userObj));
-          shop.auth(data);
-        }
+        let userObj = { uid: data.uid, username: data.displayName };
+        sessionStorage.setItem("shoppy", JSON.stringify(userObj));
+        shop.auth(data);
       },
     }
   );

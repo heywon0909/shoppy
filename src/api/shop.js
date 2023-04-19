@@ -37,7 +37,6 @@ export default class Shop {
     return await this.apiClient.setMyBuying(user, item);
   }
   async delBuying(user, item) {
-    console.log("user", user, item);
     return await this.apiClient.delMyBuying(user, item);
   }
   async updateBuying(user, item) {
@@ -47,7 +46,7 @@ export default class Shop {
     return await this.apiClient.setRealBuy(user, item);
   }
   async auth(user) {
-    return this.apiClient.auth(user);
+    return this.apiClient.init(user);
   }
   async login() {
     return this.apiClient.signWithGoogleLogin();

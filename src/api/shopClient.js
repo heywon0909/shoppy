@@ -18,24 +18,25 @@ import {
 export default class ShopClient {
   #user = null;
   constructor() {
+    this.auth = getAuth();
     this.itemsCollection = collection(db, "shop", "list", "items");
   }
   async signWithGoogle() {
-    const auth = getAuth();
     const provider = new GoogleAuthProvider();
-    await signInWithRedirect(auth, provider);
+    await signInWithRedirect(this.auth, provider);
     return true;
   }
   async signWithGoogleLogin() {
-    const auth = getAuth();
-    return await getRedirectResult(auth).then((result) => result?.user);
+    let result = null;
+    result = await getRedirectResult(this.auth).then((result) => result?.user);
+    console.log("result", result);
+    return result;
   }
   async logoutWithGoogleLogin() {
-    const auth = getAuth();
-    auth.signOut();
+    this.auth.signOut();
     return true;
   }
-  auth(user) {
+  init(user) {
     this.#user = user;
   }
   async #initBuyCollection(user) {
