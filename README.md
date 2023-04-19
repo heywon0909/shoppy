@@ -31,5 +31,6 @@ React를 공부하면서 제작한 쇼핑몰[HW-Shoppy] 웹뷰 입니다. 🙌
     - 구매 내역 조회 
 
 
-![screencapture-localhost-3000-2023-04-18-18_01_47](https://user-images.githubusercontent.com/50330312/232728403-ed40c468-3eb6-408e-99bc-2c77d6972f0f.png)
+![screencapture-localhost-3000-2023-04-19-11_01_58](https://user-images.githubusercontent.com/50330312/232947373-dcad0c0c-c402-4b6a-b58b-16ed58c90600.png)
+
 
