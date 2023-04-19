@@ -16,9 +16,6 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 export default class ShopClient {
-  #userInterestCollection = null;
-  #userBuyCollection = null;
-  #userBuyingCollection = null;
   #user = null;
   constructor() {
     this.itemsCollection = collection(db, "shop", "list", "items");
@@ -58,13 +55,6 @@ export default class ShopClient {
   }
   #getFirebaseDoc(name, user) {
     return doc(db, name, user.uid);
-  }
-  init(user) {
-    console.log("user", user);
-    this.#user = user;
-    this.#userBuyCollection = doc(db, "buy", user?.uid);
-    this.#userInterestCollection = doc(db, "interest", user?.uid);
-    this.#userBuyingCollection = doc(db, "buying", user?.uid);
   }
   // 관심있는 아이템 가져오기
   async getMyInterest(user) {

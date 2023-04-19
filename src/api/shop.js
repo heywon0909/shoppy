@@ -47,7 +47,7 @@ export default class Shop {
     return await this.apiClient.setRealBuy(user, item);
   }
   async auth(user) {
-    return this.apiClient.init(user);
+    return this.apiClient.auth(user);
   }
   async login() {
     return this.apiClient.signWithGoogleLogin();

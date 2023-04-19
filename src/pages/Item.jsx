@@ -6,7 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 export default function Item() {
   const { id } = useParams();
   const { shop } = useShopApi();
-  const { isLoading, data } = useQuery(["itemDetail"], () => shop.getItem(id));
+  const { isLoading, data } = useQuery(["itemDetail"], () => shop.getItem(id), {
+    staleTime: 1000 * 60 * 1,
+  });
   return (
     <>
       <ItemDetail id={id} data={data} isLoading={isLoading} />

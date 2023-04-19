@@ -5,16 +5,30 @@ import { useShopApi } from "context/ShopContext";
 
 export default function Items() {
   const { shop } = useShopApi();
-  const { isLoading, data } = useQuery(["items"], () => shop.getItem(), {
-    staleTime: 1000 * 60 * 1,
-  });
+  const { isLoading: isGetItemsLoading, data } = useQuery(
+    ["items"],
+    () => shop.getItem(),
+    {
+      refetchOnMount: true,
+    }
+  );
 
   return (
     <section className="flex md:w-2/3 w-full h-auto mt-10 flex-wrap justify-center">
-      {!isLoading &&
-        data.map((item, index) => {
+      {!isGetItemsLoading &&
+        data.map((item) => {
           return <Item item={item} index={item.id} key={item.id} />;
         })}
+      {isGetItemsLoading && (
+        <div>
+          <img
+            src="/assets/image/waiting-icon-gif.jpg"
+            title="loading"
+            alt="loadingBar"
+            className="w-12 h-12"
+          />
+        </div>
+      )}
     </section>
   );
 }
