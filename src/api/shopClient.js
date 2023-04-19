@@ -227,25 +227,35 @@ export default class ShopClient {
       result = await this.#setFirebaseDoc("buy", user, {
         id: user.id,
         username: user.username,
-        date: new Date().toLocaleDateString(),
+        date: new Date(),
         items: items,
       });
     } else {
-      let buyData = await this.getbuyItem(user);
+      let buyData = await this.getbuyItem(user).then((result) => result.items);
 
+      let originalItems = [];
       let mappedItems = items.map((item) => {
-        let find = buyData.find((data) => data.id === item.id);
+        let find = buyData.find(
+          (data) =>
+            data.id === item.id &&
+            new Date(data.date.seconds * 1000).toLocaleDateString() ===
+              item.date.toLocaleDateString()
+        );
+
         if (find) {
+          originalItems.push(find);
           return { ...item, count: find.count + 1 };
         } else return item;
       });
 
       const docRef = this.#getFirebaseDoc("buy", user);
-
+      await updateDoc(docRef, {
+        items: arrayRemove(...originalItems),
+      });
       result = await updateDoc(docRef, {
         id: user.uid,
         username: user.username,
-        date: new Date().toLocaleDateString(),
+        date: new Date(),
         items: arrayUnion(...mappedItems),
       });
     }

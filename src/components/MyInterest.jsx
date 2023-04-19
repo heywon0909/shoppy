@@ -7,7 +7,6 @@ export default function MyInterest() {
     const stored = JSON.parse(sessionStorage.getItem("shoppy"));
     return shop.getInterest(stored);
   });
-  console.log("isLoading", isLoading, items);
 
   return (
     <div className="w-full flex flex-wrap h-full p-2">

@@ -2,11 +2,10 @@ import React from "react";
 import { BsHeart, BsHeartFill } from "react-icons/bs";
 import { useQuery } from "@tanstack/react-query";
 import { useShopApi } from "context/ShopContext";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import GoBuyLink from "./GoBuyLink";
 export default function ItemDetail({ id, data, isLoading }) {
   const { shop } = useShopApi();
-  const navigate = useNavigate();
   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const {
     isLoading: isInterest,
@@ -55,7 +54,7 @@ export default function ItemDetail({ id, data, isLoading }) {
               alt={data.title}
             />
           </div>
-          <div className="flex flex-col p-2 h-auto xl:w-3/6">
+          <div className="flex flex-col p-2 h-auto xl:w-3/6 w-full">
             <div className="space-y-4 border-b border-zinc-300 pb-4">
               <p className="text-2xl">{data.title}</p>
               <p className="text-purple-500 text-2xl">
@@ -82,12 +81,11 @@ export default function ItemDetail({ id, data, isLoading }) {
                 >
                   장바구니
                 </button>
-                <button
-                  className="w-full bg-purple-500 text-white p-2"
-                  onClick={() => navigate("/myPage/order/new/" + id)}
-                >
-                  바로구매
-                </button>
+
+                <GoBuyLink
+                  item={data}
+                  classFmt={"w-full bg-purple-500 text-white p-2"}
+                />
               </div>
             </div>
           </div>

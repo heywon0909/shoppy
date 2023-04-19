@@ -14,7 +14,7 @@ export default function ShopItem({ item, onClose }) {
       const stored = JSON.parse(sessionStorage.getItem("shoppy"));
       try {
         const result = await shop.delBuying(stored, item);
-        console.log("item", item, result);
+
         if (result) {
           toast.success("장바구니에서 상품이 삭제되었습니다", {
             autoClose: 2000,
@@ -34,7 +34,6 @@ export default function ShopItem({ item, onClose }) {
       const stored = JSON.parse(sessionStorage.getItem("shoppy"));
       try {
         const result = await shop.updateBuying(stored, item);
-        console.log("item", item, result);
         if (result) {
           onClose();
         }
@@ -55,9 +54,6 @@ export default function ShopItem({ item, onClose }) {
           </div>
           <div className="flex flex-col p-2 h-24">
             <p className="text-sm">{title}</p>
-            <div className="flex text-sm text-zinc-600 flex-wrap">
-              {count}개
-            </div>
           </div>
         </div>
       </td>
@@ -73,7 +69,7 @@ export default function ShopItem({ item, onClose }) {
           {new Intl.NumberFormat("ko-KR").format(item.price)}원
         </div>
         <GoBuyLink
-          id={item?.id}
+          item={item}
           classFmt={"w-full bg-slate-900 text-white p-2"}
         />
       </td>

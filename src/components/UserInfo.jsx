@@ -26,7 +26,7 @@ export default function UserInfo({ user, items }) {
         <p> {username} 님</p>
         <div className="flex text-sm text-zinc-600 flex-wrap">
           누적 구매 금액
-          <p className="font-semibold">
+          <p className="font-semibold ps-2">
             {new Intl.NumberFormat("ko-KR").format(sum?.totalSum)} 원
           </p>
         </div>

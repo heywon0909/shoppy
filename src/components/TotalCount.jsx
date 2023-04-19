@@ -1,9 +1,6 @@
 import React, { useCallback, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import GoBuyLink from "./GoBuyLink";
 export default function TotalCount({ items }) {
-  const navigate = useNavigate();
-
   const setShopTotal = useCallback((items) => {
     let count = { total: 0, discountSum: 0, buyItems: [] };
     if (!items) return;
@@ -60,7 +57,7 @@ export default function TotalCount({ items }) {
       </div>
       <div className="w-full p-2 flex justify-center">
         <GoBuyLink
-          id={String(buyItems?.join("&"))}
+          item={buyItems}
           classFmt={"md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"}
         />
       </div>
