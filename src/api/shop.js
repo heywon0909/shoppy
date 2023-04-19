@@ -13,11 +13,14 @@ export default class Shop {
   }
   async getInterest(user, id = null) {
     return this.apiClient.getMyInterest(user).then((result) => {
-      if (id) {
+      if (result) {
+        if (id) {
         const item = result.filter((item) => item.id === id);
         if (item?.length > 0) return item;
         else return [];
+        }
       }
+      
       return result;
     });
   }

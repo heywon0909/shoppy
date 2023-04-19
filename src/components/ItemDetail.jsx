@@ -16,8 +16,11 @@ export default function ItemDetail({ id, data, isLoading }) {
   });
 
   const { isSuccess: isAddingSuccess, refetch: onAddInterest } = useQuery(
-    ["AddInterest"],
-    () => shop.addInterest(stored, data),
+    ["onAddInterest"],
+    () => {
+      console.log('타니');
+      return shop.addInterest(stored, data)
+    },
     { enabled: false }
   );
 
@@ -66,7 +69,10 @@ export default function ItemDetail({ id, data, isLoading }) {
                 {!isInterest && interest?.length > 0 ? (
                   <BsHeartFill onClick={() => onDelInterest(stored, data)} />
                 ) : (
-                  <BsHeart onClick={() => onAddInterest(stored, data)} />
+                    <BsHeart onClick={() => {
+                      console.log('타니')
+                      return onAddInterest(data)
+                    }} />
                 )}
               </div>
               {/* <p className='ml-2 pb-1 text-sm font-semibold text-zinc-500'>{data.heart}+</p> */}
