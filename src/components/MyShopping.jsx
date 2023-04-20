@@ -91,7 +91,7 @@ export default function MyShopping({ route }) {
         <div className="w-full flex justify-center p-2 mt-2">
           <button
             className="md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"
-            onClick={() => onBuyItem(stored)}
+            onClick={() => onBuyItem()}
           >
             결제하기
           </button>

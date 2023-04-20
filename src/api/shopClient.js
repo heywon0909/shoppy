@@ -40,17 +40,14 @@ export default class ShopClient {
     this.#user = user;
   }
   async #initBuyCollection(user) {
-    const docSnap = await getDoc(this.#getFirebaseDoc("buy", user));
-    return docSnap.data();
+    return await getDoc(this.#getFirebaseDoc("buy", user));
   }
   async #initInterestCollection(user) {
     const docSnap = await getDoc(this.#getFirebaseDoc("interest", user));
-    console.log('docSnap',docSnap.data())
     return docSnap.data();
   }
   async #initBuyingCollection(user) {
-    const docSnap = await getDoc(this.#getFirebaseDoc("buying", user));
-    return docSnap.data();
+    return await getDoc(this.#getFirebaseDoc("buying", user));
   }
   #setFirebaseDoc(name, user, params) {
     return setDoc(doc(db, name, user?.uid), params);
@@ -60,10 +57,7 @@ export default class ShopClient {
   }
   // 관심있는 아이템 가져오기
   async getMyInterest(user) {
-    return await this.#initInterestCollection(user).then((data) => {
-      console.log('data', data);
-      return data != null ? data.items : false;
-    });
+    return await this.#initInterestCollection(user).then((data) => data.items);
   }
   // 아이템 가져오기
   async getItem() {
@@ -72,21 +66,18 @@ export default class ShopClient {
     );
   }
   async getbuyingItem(user) {
-    return await this.#initBuyingCollection(user).then((data) => data.items);
+    let result = (await this.#initBuyingCollection(user)).data();
+    return result.items;
   }
   async getbuyItem(user) {
-    return await this.#initBuyCollection(user);
+    let result = (await this.#initBuyCollection(user)).data();
+    return result;
   }
   async setMyInterest(user, item) {
-    console.log('user', user, item);
-    const docSnap = await getDoc(this.#getFirebaseDoc("buying", user));
-    console.log('docSnap', docSnap, docSnap.data());
-    // const interestCollectionRef = this.#initInterestCollection(user.uid);
-    const interestCollectionRef = this.getMyInterest(user);
-    console.log('interest',interestCollectionRef,interestCollectionRef==null)
+    const interestCollectionData = this.#initInterestCollection(user);
     let result = null;
-    if (docSnap.data() == null) {
-      console.log('추가')
+    if (interestCollectionData == null) {
+      // 새로 넣기
       result = await this.#setFirebaseDoc("interest", user, {
         id: user.uid,
         username: user.username,
@@ -100,7 +91,7 @@ export default class ShopClient {
         ],
       });
     } else {
-      console.log('업데이트')
+      // 업데이트
       const docRef = this.#getFirebaseDoc("interest", user);
 
       result = await updateDoc(docRef, {
@@ -130,34 +121,49 @@ export default class ShopClient {
     return result == null ? true : false;
   }
   async setMyBuying(user, item) {
-    const buyingCollectionRef = this.#initBuyingCollection(user);
+    const buyingCollectionRef = (await this.#initBuyingCollection(user)).data();
     let result = null;
-    if (!buyingCollectionRef) {
+
+    // 새로 추가
+    if (buyingCollectionRef == null) {
       result = await this.#setFirebaseDoc("buying", user, {
-        id: user.id,
-        username: user.displayName,
+        id: user.uid,
+        username: user.username,
         items: [
           {
             id: item.id,
             title: item.title,
             price: item.price,
+            heart: 0,
             count: 1,
             snippet: { ...item.snippet },
           },
         ],
       });
+      // 업데이트
     } else {
-      const docRef = this.#getFirebaseDoc("buying", user);
+      let itemArr = [item];
+      let buyingData = await this.getbuyingItem(user);
+      let originalItems = [];
+      let mappedItems = itemArr.map((item) => {
+        let find = buyingData.find((data) => data.id === item.id);
+        if (find) {
+          originalItems.push(find);
 
+          return { ...item, count: find.count == null ? 1 : find.count + 1 };
+        } else return { ...item, count: 1 };
+      });
+
+      // 기존 데이터 삭제
+      const docRef = this.#getFirebaseDoc("buying", user);
+      await updateDoc(docRef, {
+        items: arrayRemove(...originalItems),
+      });
+      // 변경하여 추가
       result = await updateDoc(docRef, {
         id: user.uid,
         username: user.username,
-        items: arrayUnion({
-          id: item.id,
-          title: item.title,
-          price: item.price,
-          snippet: { ...item.snippet },
-        }),
+        items: arrayUnion(...mappedItems),
       });
     }
     return result == null ? true : false;
@@ -216,6 +222,7 @@ export default class ShopClient {
         id: item.id,
         title: item.title,
         price: item.price,
+        heart: item.heart,
         count: item.count,
         snippet: { ...item.snippet },
       }),
@@ -223,16 +230,18 @@ export default class ShopClient {
     return result == null ? true : false;
   }
   async setRealBuy(user, items) {
-    const buyCollectionRef = this.#initBuyCollection(user);
+    const buyCollectionRef = (await this.#initBuyCollection(user)).data();
+
     let result = null;
-    if (!buyCollectionRef) {
+    if (buyCollectionRef == null) {
+      // 새로추가
       result = await this.#setFirebaseDoc("buy", user, {
-        id: user.id,
+        id: user.uid,
         username: user.username,
-        date: new Date(),
         items: items,
       });
     } else {
+      // 업데이트
       let buyData = await this.getbuyItem(user).then((result) => result.items);
 
       let originalItems = [];
@@ -251,9 +260,12 @@ export default class ShopClient {
       });
 
       const docRef = this.#getFirebaseDoc("buy", user);
-      await updateDoc(docRef, {
-        items: arrayRemove(...originalItems),
-      });
+      if (originalItems?.length > 0) {
+        await updateDoc(docRef, {
+          items: arrayRemove(...originalItems),
+        });
+      }
+
       result = await updateDoc(docRef, {
         id: user.uid,
         username: user.username,

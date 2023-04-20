@@ -6,14 +6,10 @@ import UserInfo from "./UserInfo";
 export default function UserShopInfo() {
   const { shop } = useShopApi();
   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
-  const { isLoading, data: user } = useQuery(
-    ["buyItems"],
-    () => shop.getPurchasedItems(stored),
-    {
-      staleTime: 1000 * 60 * 5,
-    }
+  const { isLoading, data: user } = useQuery(["buyItems"], () =>
+    shop.getPurchasedItems(stored)
   );
-
+  console.log("user", user);
   return (
     <>
       <div className="p-2 flex w-full flex-wrap h-auto items-stretch">

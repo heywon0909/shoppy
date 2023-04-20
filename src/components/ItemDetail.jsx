@@ -17,10 +17,7 @@ export default function ItemDetail({ id, data, isLoading }) {
 
   const { isSuccess: isAddingSuccess, refetch: onAddInterest } = useQuery(
     ["onAddInterest"],
-    () => {
-      console.log('타니');
-      return shop.addInterest(stored, data)
-    },
+    () => shop.addInterest(stored, data),
     { enabled: false }
   );
 
@@ -40,6 +37,7 @@ export default function ItemDetail({ id, data, isLoading }) {
     () => shop.addBuying(stored, data),
     {
       onSuccess: () => {
+        console.log("타니");
         toast.success("장바구니에 추가되었습니다.", { autoClose: 2000 });
       },
       enabled: false,
@@ -69,10 +67,12 @@ export default function ItemDetail({ id, data, isLoading }) {
                 {!isInterest && interest?.length > 0 ? (
                   <BsHeartFill onClick={() => onDelInterest(stored, data)} />
                 ) : (
-                    <BsHeart onClick={() => {
-                      console.log('타니')
-                      return onAddInterest(data)
-                    }} />
+                  <BsHeart
+                    onClick={() => {
+                      console.log("타니");
+                      return onAddInterest(data);
+                    }}
+                  />
                 )}
               </div>
               {/* <p className='ml-2 pb-1 text-sm font-semibold text-zinc-500'>{data.heart}+</p> */}
@@ -83,7 +83,7 @@ export default function ItemDetail({ id, data, isLoading }) {
               <div className="w-full flex items-stretch p-2">
                 <button
                   className="w-full bg-slate-700 text-white p-2 mr-2"
-                  onClick={() => onAddBuying(id, stored)}
+                  onClick={() => onAddBuying(data)}
                 >
                   장바구니
                 </button>
