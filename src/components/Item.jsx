@@ -11,10 +11,10 @@ export default function Item({ item, index }) {
       className="xl:w-1/4 lg:w-2/5 md:w-1/2 w-max flex flex-col items-stretch cursor-pointer"
       key={index}
     >
-      <article className="md:p-2">
+      <article className="md:p-2 md:h-11/12 h-5/6">
         <img
           src={snippet.url}
-          className="xl:h-96 h-max w-full"
+          className="h-full w-full"
           alt={title}
           onClick={goDetail}
         />

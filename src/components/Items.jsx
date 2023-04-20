@@ -10,7 +10,7 @@ export default function Items() {
   );
 
   return (
-    <section className="flex md:w-2/3 w-full h-auto mt-10 flex-wrap justify-center">
+    <section className="flex xl:w-9/12  md:w-2/3 w-full h-full mt-10 flex-wrap justify-center">
       {!isGetItemsLoading &&
         data.map((item) => {
           return <Item item={item} index={item.id} key={item.id} />;
