@@ -15,12 +15,12 @@ export default class Shop {
     return this.apiClient.getMyInterest(user).then((result) => {
       if (result) {
         if (id) {
-        const item = result.filter((item) => item.id === id);
-        if (item?.length > 0) return item;
-        else return [];
+          const item = result.filter((item) => item.id === id);
+          if (item?.length > 0) return item;
+          else return [];
         }
       }
-      
+
       return result;
     });
   }
@@ -51,10 +51,14 @@ export default class Shop {
   async auth(user) {
     return this.apiClient.init(user);
   }
+  authRequired() {
+    return this.apiClient.isAuth();
+  }
   async login() {
     return this.apiClient.signWithGoogleLogin();
   }
   async logout() {
+    this.apiClient.reInit();
     return this.apiClient.logoutWithGoogleLogin();
   }
   async loginToGoogle() {

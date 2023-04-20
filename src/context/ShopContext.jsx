@@ -6,6 +6,7 @@ export const ShopContext = createContext();
 export function ShopApiProvider({ children }) {
   const client = new ShopClient();
   const shop = new Shop(client);
+
   return (
     <ShopContext.Provider value={{ shop }}>{children}</ShopContext.Provider>
   );

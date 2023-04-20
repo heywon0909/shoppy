@@ -37,7 +37,18 @@ export default class ShopClient {
     return true;
   }
   init(user) {
-    this.#user = user;
+    if (user) {
+      this.#user = user;
+      sessionStorage.setItem("shoppy", JSON.stringify(user));
+    } else {
+      this.reInit();
+    }
+  }
+  reInit() {
+    sessionStorage.removeItem("shoppy");
+  }
+  isAuth() {
+    return Object.keys(sessionStorage).find((key) => key.includes("shoppy"));
   }
   async #initBuyCollection(user) {
     return await getDoc(this.#getFirebaseDoc("buy", user));

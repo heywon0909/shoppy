@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 // import CryptoJS from "crypto-js";
 // import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useShopApi } from "context/ShopContext";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+// import UserStateBut from "./UserStateBut";
 export default function LoginStateBar() {
   const { shop } = useShopApi();
+
   const navigate = useNavigate();
 
   const { refetch: loginApply } = useQuery(
@@ -27,24 +29,22 @@ export default function LoginStateBar() {
       enabled: !!isTrue,
       select: (data) => {
         let userObj = { uid: data.uid, username: data.displayName };
-        sessionStorage.setItem("shoppy", JSON.stringify(userObj));
-        shop.auth(data);
+        shop.auth(userObj);
       },
     }
   );
 
-  const { refetch: logoutApply } = useQuery(["logout"], () => shop.logout(), {
-    enabled: false,
-    onSuccess: () => {
-      sessionStorage.removeItem("shoppy");
-      navigate("./");
-    },
-  });
-  const stored = JSON.parse(sessionStorage.getItem("shoppy"));
+  const { isSuccess: isLogoutSuccess, refetch: logoutApply } = useQuery(
+    ["logout"],
+    () => shop.logout(),
+    {
+      enabled: false,
+    }
+  );
+
   const handleLogin = () => {
-    console.log("유저", stored);
-    if (stored) {
-      console.log("로그아웃");
+    // const stored = JSON.parse(sessionStorage.shoppy);
+    if (shop.authRequired()) {
       return logoutApply();
     } else {
       return loginApply();
@@ -52,10 +52,19 @@ export default function LoginStateBar() {
   };
 
   const checkValidateUser = () => {
-    const stored = JSON.parse(sessionStorage.shoppy);
-    if (stored) navigate("secured/mypage/myPage");
+    if (shop.authRequired()) navigate("secured/mypage/myPage");
     else loginApply();
   };
+
+  const UserStateButton = useMemo(() => {
+    if (isLoginSuccess || isLogoutSuccess) {
+      if (isLogoutSuccess) {
+        shop.auth();
+        <Navigate to="/" />;
+      }
+      return shop.authRequired();
+    } else return shop.authRequired();
+  }, [shop, isLoginSuccess, isLogoutSuccess]);
 
   return (
     <div className="w-full flex flex-row-reverse p-2 mr-2 bg-black">
@@ -65,11 +74,8 @@ export default function LoginStateBar() {
       >
         마이페이지
       </button>
-
       <button className="mr-2 text-xs text-slate-300" onClick={handleLogin}>
-        {isLoginSuccess || sessionStorage.getItem("shoppy")
-          ? "로그아웃"
-          : "로그인"}
+        {UserStateButton != null ? "로그아웃" : "로그인"}
       </button>
     </div>
   );

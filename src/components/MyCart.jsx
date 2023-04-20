@@ -40,7 +40,16 @@ export default function MyCart() {
               })}
           </tbody>
         </table>
-        {items ? <TotalCount items={items} key="totalCount" /> : null}
+        {items?.length >= 0 ? (
+          <div className="w-full flex justify-center text-sm h-40 items-center">
+            <div className="text-purple-700">장바구니에 상품을 담아주세요</div>
+          </div>
+        ) : (
+          ""
+        )}
+        {items?.length > 0 ? (
+          <TotalCount items={items} key="totalCount" />
+        ) : null}
       </div>
     </div>
   );

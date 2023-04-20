@@ -5,12 +5,8 @@ import { useShopApi } from "context/ShopContext";
 
 export default function Items() {
   const { shop } = useShopApi();
-  const { isLoading: isGetItemsLoading, data } = useQuery(
-    ["items"],
-    () => shop.getItem(),
-    {
-      refetchOnMount: true,
-    }
+  const { isLoading: isGetItemsLoading, data } = useQuery(["items"], () =>
+    shop.getItem()
   );
 
   return (

@@ -18,7 +18,7 @@ export default function MyInterest() {
                 <img
                   src={item.snippet.url}
                   alt={item.title}
-                  className="h-full"
+                  className="h-full w-full"
                 />
               </div>
               <div className="flex flex-col text-sm text-zinc-600 p-2">
