@@ -7,6 +7,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import Home from "./pages/Home";
 import Item from "./pages/Item";
 import MyPage from "./pages/MyPage";
+import ProtectedLayout from "components/ProtectedLayout";
 
 const router = createBrowserRouter([
   {
@@ -16,10 +17,38 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "item/:id", element: <Item /> },
-      { path: "secured/mypage/myPage", element: <MyPage /> },
-      { path: "myPage/myWishList", element: <MyPage /> },
-      { path: "myPage/order/cart", element: <MyPage /> },
-      { path: "myPage/order/new/:items", element: <MyPage /> },
+      {
+        path: "secured/mypage/myPage",
+        element: (
+          <ProtectedLayout>
+            <MyPage />
+          </ProtectedLayout>
+        ),
+      },
+      {
+        path: "myPage/myWishList",
+        element: (
+          <ProtectedLayout>
+            <MyPage />
+          </ProtectedLayout>
+        ),
+      },
+      {
+        path: "myPage/order/cart",
+        element: (
+          <ProtectedLayout>
+            <MyPage />
+          </ProtectedLayout>
+        ),
+      },
+      {
+        path: "myPage/order/new/:items",
+        element: (
+          <ProtectedLayout>
+            <MyPage />
+          </ProtectedLayout>
+        ),
+      },
     ],
   },
 ]);
