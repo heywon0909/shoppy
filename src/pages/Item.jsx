@@ -6,10 +6,12 @@ import { useQuery } from "@tanstack/react-query";
 export default function Item() {
   const { id } = useParams();
   const { shop } = useShopApi();
-  const { isLoading, data } = useQuery(["itemDetail"], () => shop.getItem(id));
+  const { isLoading: isItemRefreshing, data } = useQuery(["itemDetail"], () =>
+    shop.getItem(id)
+  );
   return (
     <>
-      <ItemDetail id={id} data={data} isLoading={isLoading} />
+      <ItemDetail id={id} data={data} isItemRefreshing={isItemRefreshing} />
     </>
   );
 }

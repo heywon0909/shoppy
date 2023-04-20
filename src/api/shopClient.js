@@ -43,8 +43,7 @@ export default class ShopClient {
     return await getDoc(this.#getFirebaseDoc("buy", user));
   }
   async #initInterestCollection(user) {
-    const docSnap = await getDoc(this.#getFirebaseDoc("interest", user));
-    return docSnap.data();
+    return await getDoc(this.#getFirebaseDoc("interest", user));
   }
   async #initBuyingCollection(user) {
     return await getDoc(this.#getFirebaseDoc("buying", user));
@@ -57,7 +56,8 @@ export default class ShopClient {
   }
   // 관심있는 아이템 가져오기
   async getMyInterest(user) {
-    return await this.#initInterestCollection(user).then((data) => data.items);
+    let result = (await this.#initInterestCollection(user)).data();
+    return result?.items;
   }
   // 아이템 가져오기
   async getItem() {
@@ -74,7 +74,9 @@ export default class ShopClient {
     return result;
   }
   async setMyInterest(user, item) {
-    const interestCollectionData = this.#initInterestCollection(user);
+    const interestCollectionData = (
+      await this.#initInterestCollection(user)
+    ).data();
     let result = null;
     if (interestCollectionData == null) {
       // 새로 넣기

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useShopApi } from "context/ShopContext";
 import { toast } from "react-toastify";
 import GoBuyLink from "./GoBuyLink";
-export default function ItemDetail({ id, data, isLoading }) {
+export default function ItemDetail({ id, data, isItemRefreshing }) {
   const { shop } = useShopApi();
   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
   const {
@@ -46,7 +46,7 @@ export default function ItemDetail({ id, data, isLoading }) {
 
   return (
     <section className="flex justify-center p-2">
-      {!isLoading && data && (
+      {!isItemRefreshing && data && (
         <article className="w-full max-w-screen-xl flex p-2 justify-center flex-wrap">
           <div className="xl:w-3/6 w-full h-auto">
             <img
