@@ -49,6 +49,14 @@ const router = createBrowserRouter([
           </ProtectedLayout>
         ),
       },
+      {
+        path: "myPage/order/new/buying/:items",
+        element: (
+          <ProtectedLayout>
+            <MyPage />
+          </ProtectedLayout>
+        ),
+      },
     ],
   },
 ]);

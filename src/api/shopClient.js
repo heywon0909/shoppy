@@ -159,7 +159,7 @@ export default class ShopClient {
       let buyingData = await this.getbuyingItem(user);
       let originalItems = [];
       let mappedItems = itemArr.map((item) => {
-        let find = buyingData.find((data) => data.id === item.id);
+        let find = buyingData?.find((data) => data.id === item.id);
         if (find) {
           originalItems.push(find);
 
@@ -203,10 +203,12 @@ export default class ShopClient {
     }
 
     let update_result = null;
+
     result = await updateDoc(docRef, {
       items: arrayRemove({
         id: item.id,
         title: item.title,
+        heart: item.heart,
         price: item.price,
         count: item.count,
         snippet: { ...item.snippet },
@@ -218,6 +220,7 @@ export default class ShopClient {
         username: user.username,
         items: arrayUnion({
           id: item.id,
+          heart: item.heart,
           title: item.title,
           price: item.price,
           count: item.count + 1,
@@ -229,16 +232,10 @@ export default class ShopClient {
   }
   async delMyBuying(user, item) {
     const docRef = this.#getFirebaseDoc("buying", user);
+    let mappedItems = Array.isArray(item) ? item : [item];
     let result = null;
     result = await updateDoc(docRef, {
-      items: arrayRemove({
-        id: item.id,
-        title: item.title,
-        price: item.price,
-        heart: item.heart,
-        count: item.count,
-        snippet: { ...item.snippet },
-      }),
+      items: arrayRemove(...mappedItems),
     });
     return result == null ? true : false;
   }
@@ -259,7 +256,7 @@ export default class ShopClient {
 
       let originalItems = [];
       let mappedItems = items.map((item) => {
-        let find = buyData.find(
+        let find = buyData?.find(
           (data) =>
             data.id === item.id &&
             new Date(data.date.seconds * 1000).toLocaleDateString() ===

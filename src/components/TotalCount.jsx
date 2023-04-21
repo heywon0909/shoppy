@@ -15,7 +15,8 @@ export default function TotalCount({ items }) {
   }, []);
 
   const sum = useMemo(() => setShopTotal(items), [items, setShopTotal]);
-  const { total, discountSum, buyItems } = sum;
+  const { total, discountSum } = sum;
+
   return (
     <div className="w-full flex flex-col mt-10 border-t border-zinc-600 space-y-3">
       <div className="w-full flex border-b border-zinc-300 text-sm p-2">
@@ -57,7 +58,7 @@ export default function TotalCount({ items }) {
       </div>
       <div className="w-full p-2 flex justify-center">
         <GoBuyLink
-          item={buyItems}
+          item={items}
           classFmt={"md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"}
         />
       </div>

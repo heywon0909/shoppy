@@ -4,10 +4,11 @@ export default function UserInfo({ user, items }) {
   const { username } = user;
   const setUserShop = useCallback((items) => {
     let count = { total: 0, totalSum: 0 };
-    if (!items) return;
+    if (!items) return count;
     Object.values(items).forEach((item) => {
       const { price, snippet } = item;
-      count.totalSum += (snippet.discount / 100) * price * Number(item.count);
+      count.totalSum +=
+        (1 - snippet.discount / 100) * price * Number(item.count);
       count.total += Number(item.count);
     });
     return count;

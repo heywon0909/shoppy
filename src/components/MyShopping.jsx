@@ -3,10 +3,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useShopApi } from "context/ShopContext";
 import { toast } from "react-toastify";
 import AddBut from "./AddBut";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 export default function MyShopping({ route }) {
   const { shop } = useShopApi();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  console.log("lo", pathname);
   const stored = JSON.parse(sessionStorage.getItem("shoppy"));
 
   const [items, setItems] = useState(
@@ -16,7 +18,11 @@ export default function MyShopping({ route }) {
   const { refetch: onBuyItem } = useQuery(
     ["getBuy"],
     () => {
+      if (pathname.includes("buying")) {
+        shop.delBuying(stored, items);
+      }
       const itemsArr = items.map((item) => ({ ...item, date: new Date() }));
+      sessionStorage.removeItem("item");
       return shop.buyItem(stored, itemsArr);
     },
     {

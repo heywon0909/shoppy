@@ -14,6 +14,7 @@ export default function MyInterest() {
   return (
     <div className="w-full flex flex-wrap h-full p-2">
       {!isLoading &&
+        items?.length > 0 &&
         items.map((item) => {
           return (
             <div className="w-1/3 p-2 flex flex-col" key={item.id}>

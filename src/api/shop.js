@@ -13,7 +13,7 @@ export default class Shop {
   }
   async getInterest(user, id = null) {
     return this.apiClient.getMyInterest(user).then((result) => {
-      if (result) {
+      if (result != null) {
         if (id) {
           const item = result.filter((item) => item.id === id);
           if (item?.length > 0) return item;
@@ -21,7 +21,7 @@ export default class Shop {
         }
       }
 
-      return result;
+      return result == null ? true : result;
     });
   }
   async getBuying(user) {

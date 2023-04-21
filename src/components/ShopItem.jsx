@@ -33,7 +33,7 @@ export default function ShopItem({ item, onClose }) {
     async (item) => {
       const stored = JSON.parse(sessionStorage.getItem("shoppy"));
       try {
-        const result = await shop.updateBuying(stored, item);
+        const result = await shop.addBuying(stored, item);
         if (result) {
           onClose();
         }

@@ -20,9 +20,15 @@ export default function UserShopInfo() {
           구매내역
         </div>
         {!isLoading &&
+          user?.items &&
           user?.items.map((item, index) => {
             return <PurchasedItem item={item} key={index} />;
           })}
+        {!isLoading && !user?.items && (
+          <div className="w-full flex justify-center h-40 items-center text-purple-600 text-sm">
+            구매하신 내역이 없습니다.
+          </div>
+        )}
       </div>
     </>
   );
