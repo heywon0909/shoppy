@@ -19,26 +19,31 @@ import {
 export default class ShopClient {
   #user = null;
   constructor() {
-    this.auth = getAuth();
     this.itemsCollection = collection(db, "shop", "list", "items");
   }
   async signWithGoogle() {
     console.log("this", this.auth);
     const provider = new GoogleAuthProvider();
-    await signInWithRedirect(this.auth, provider);
+    const auth = getAuth();
+    await signInWithRedirect(auth, provider);
     return true;
   }
   async signWithGoogleLogin() {
     let result = null;
-
-    result = await getRedirectResult(this.auth)
-      .then((result) => result.user)
+    const auth = getAuth();
+    result = await getRedirectResult(auth)
+      .then((result) => {
+        console.log("result", result);
+        return result.user;
+      })
       .catch((error) => console.warn(error));
 
     return result;
   }
   async logoutWithGoogleLogin() {
-    this.auth.signOut();
+    const auth = getAuth();
+    auth.signOut();
+
     return true;
   }
   init(user) {
