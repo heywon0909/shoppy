@@ -2,6 +2,7 @@ import {
   GoogleAuthProvider,
   getAuth,
   getRedirectResult,
+  onAuthStateChanged,
   signInWithRedirect,
 } from "firebase/auth";
 import { db } from "../firebase/firebase";
@@ -22,14 +23,18 @@ export default class ShopClient {
     this.itemsCollection = collection(db, "shop", "list", "items");
   }
   async signWithGoogle() {
+    console.log("this", this.auth);
     const provider = new GoogleAuthProvider();
     await signInWithRedirect(this.auth, provider);
     return true;
   }
   async signWithGoogleLogin() {
     let result = null;
-    result = await getRedirectResult(this.auth).then((result) => result?.user);
-    console.log("result", result);
+
+    result = await getRedirectResult(this.auth)
+      .then((result) => result.user)
+      .catch((error) => console.warn(error));
+
     return result;
   }
   async logoutWithGoogleLogin() {

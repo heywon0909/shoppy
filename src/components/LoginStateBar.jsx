@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 // import CryptoJS from "crypto-js";
 // import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useShopApi } from "context/ShopContext";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 // import UserStateBut from "./UserStateBut";
 export default function LoginStateBar() {
@@ -60,11 +60,11 @@ export default function LoginStateBar() {
     if (isLoginSuccess || isLogoutSuccess) {
       if (isLogoutSuccess) {
         shop.auth();
-        <Navigate to="/" />;
+        navigate("/");
       }
       return shop.authRequired();
     } else return shop.authRequired();
-  }, [shop, isLoginSuccess, isLogoutSuccess]);
+  }, [shop, isLoginSuccess, isLogoutSuccess, navigate]);
 
   return (
     <div className="w-full flex flex-row-reverse p-2 mr-2 bg-black">
