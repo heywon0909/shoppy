@@ -1,12 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 // import CryptoJS from "crypto-js";
 // import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { useShopApi } from "context/ShopContext";
-import { useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 // import UserStateBut from "./UserStateBut";
 export default function LoginStateBar() {
   const { shop } = useShopApi();
+
 
   const navigate = useNavigate();
 
@@ -18,15 +19,14 @@ export default function LoginStateBar() {
     }
   );
 
-  let isTrue = Object.keys(sessionStorage).find((key) =>
-    key.includes("pendingRedirect")
-  );
-
-  const { isSuccess: isLoginSuccess } = useQuery(
+  // let isTrue = Object.keys(sessionStorage).find((key) =>
+  //   key.includes("pendingRedirect")
+  // );
+  const { isSuccess: isLoginSuccess, refetch:loginToGoogle } = useQuery(
     ["login"],
     () => shop.login(),
     {
-      enabled: !!isTrue,
+      enabled: false,
       select: (data) => {
         let userObj = { uid: data.uid, username: data.displayName };
         shop.auth(userObj);
@@ -45,7 +45,7 @@ export default function LoginStateBar() {
   const handleLogin = () => {
     // const stored = JSON.parse(sessionStorage.shoppy);
     if (shop.authRequired()) {
-      return logoutApply();
+      return logoutApply(),navigate('/');
     } else {
       return loginApply();
     }
@@ -60,11 +60,23 @@ export default function LoginStateBar() {
     if (isLoginSuccess || isLogoutSuccess) {
       if (isLogoutSuccess) {
         shop.auth();
-        navigate("/");
       }
       return shop.authRequired();
     } else return shop.authRequired();
-  }, [shop, isLoginSuccess, isLogoutSuccess, navigate]);
+  }, [shop, isLoginSuccess, isLogoutSuccess]);
+
+
+    useEffect(() => {
+    let isTrue = Object.keys(sessionStorage).find((key) =>
+      key.includes("pendingRedirect")
+    );
+      if (isTrue) {
+        loginToGoogle();
+      }
+      return;
+  
+  },[loginToGoogle]);
+
 
   return (
     <div className="w-full flex flex-row-reverse p-2 mr-2 bg-black">
