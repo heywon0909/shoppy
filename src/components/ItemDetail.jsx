@@ -65,11 +65,14 @@ export default function ItemDetail({ id, data, isItemRefreshing }) {
             <div className="p-2 border-b border-zinc-300 flex">
               <div className="pt-1">
                 {!isInterest && interest?.length > 0 ? (
-                  <BsHeartFill onClick={() => onDelInterest(stored, data)} />
+                  <BsHeartFill onClick={() => {
+                    if (!stored) return toast.error("로그인 후 이용해주세요");
+                      onDelInterest(stored, data)
+                  }} />
                 ) : (
                   <BsHeart
                     onClick={() => {
-                      console.log("타니");
+                      if (!stored) return toast.error("로그인 후 이용해주세요");
                       return onAddInterest(data);
                     }}
                   />
@@ -83,7 +86,10 @@ export default function ItemDetail({ id, data, isItemRefreshing }) {
               <div className="w-full flex items-stretch p-2">
                 <button
                   className="w-full bg-slate-700 text-white p-2 mr-2"
-                  onClick={() => onAddBuying(data)}
+                  onClick={() => {
+                    if (!stored) return toast.error("로그인 후 이용해주세요");
+                    onAddBuying(data)
+                  }}
                 >
                   장바구니
                 </button>
