@@ -17,7 +17,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { db } from "./firebase";
 export const getItems = async () => {
   const itemsCollectionRef = collection(db, "shop", "list", "items");
   try {

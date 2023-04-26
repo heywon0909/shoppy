@@ -48,8 +48,8 @@ export default class Shop {
   async buyItem(user, item) {
     return await this.apiClient.setRealBuy(user, item);
   }
-  async auth(user) {
-    return this.apiClient.init(user);
+  auth(user) {
+    this.apiClient.init(user);
   }
   authRequired() {
     return this.apiClient.isAuth();

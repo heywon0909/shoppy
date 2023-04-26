@@ -1,13 +1,12 @@
-import { useShopApi } from "context/ShopContext";
 import { Navigate } from "react-router-dom";
-import React  from "react";
+import React from "react";
+import { useAuthApi } from "context/AuthContext";
 
-export default function ProtectedLayout({ children }) {
-  const { shop } = useShopApi();
-  console.log("shop", shop.authRequired());
-  
-  if (!shop.authRequired()) {
-    return <Navigate to="/" />;
+export default function ProtectedLayout({ children, requiredAdmin }) {
+  const { user } = useAuthApi();
+
+  if (!user || (requiredAdmin && !user.isAdmin)) {
+    return <Navigate to="/" replace />;
   }
 
   return children;

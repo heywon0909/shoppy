@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 import ShopClient from "../api/shopClient";
 import Shop from "../api/shop";
+
 export const ShopContext = createContext();
 
 export function ShopApiProvider({ children }) {

@@ -1,20 +1,25 @@
 import React from "react";
 import { SlHandbag } from "react-icons/sl";
 import { BsHeart } from "react-icons/bs";
+import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import User from "./User";
+import { useAuthApi } from "context/AuthContext";
+
 export default function Header() {
   const navigate = useNavigate();
   const goHome = () => navigate("/");
-
+  const { user } = useAuthApi();
   const goMyPage = (type) => {
-    let isTrue = sessionStorage.getItem("shoppy");
-    if (!isTrue)
+    if (!user)
       return toast.error("로그인 후 이용해주세요", { autoClose: 2000 });
     if (type === "buying") {
       return navigate("/myPage/order/cart");
     } else if (type === "interest") {
       return navigate("/myPage/myWishList");
+    } else if (type === "products") {
+      return navigate("/products/new");
     } else throw new Error("not found page");
   };
   return (
@@ -26,7 +31,17 @@ export default function Header() {
         >
           <mark className="font-semibold text-purple-600 pe-2">HW</mark> SHOPPY
         </div>
-        <div className="flex grow flex-row-reverse p-2 mr-5">
+        <div className="flex grow flex-row-reverse p-2 md:mr-5 -mr-3">
+          {user ? <User user={user} /> : ""}
+          {user && user.isAdmin && (
+            <button className="ml-2">
+              <FiEdit
+                size="20"
+                className="text-slate-900"
+                onClick={() => goMyPage("products")}
+              />
+            </button>
+          )}
           <button className="ml-2">
             <SlHandbag
               size="20"

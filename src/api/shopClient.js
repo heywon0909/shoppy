@@ -5,7 +5,7 @@ import {
   onAuthStateChanged,
   signInWithRedirect,
 } from "firebase/auth";
-import { db } from "../firebase/firebase";
+import { db } from "./firebase";
 import {
   collection,
   doc,
@@ -18,20 +18,21 @@ import {
 } from "firebase/firestore";
 export default class ShopClient {
   #user = null;
+  #auth = getAuth();
   constructor() {
     this.itemsCollection = collection(db, "shop", "list", "items");
   }
   async signWithGoogle() {
     console.log("this", this.auth);
     const provider = new GoogleAuthProvider();
-    const auth = getAuth();
-    await signInWithRedirect(auth, provider);
+
+    await signInWithRedirect(this.#auth, provider);
     return true;
   }
   async signWithGoogleLogin() {
     let result = null;
-    const auth = getAuth();
-    result = await getRedirectResult(auth)
+    console.log("this.auth", this.#auth);
+    result = await getRedirectResult(this.#auth)
       .then((result) => {
         console.log("result", result);
         return result.user;
@@ -58,7 +59,7 @@ export default class ShopClient {
     sessionStorage.removeItem("shoppy");
   }
   isAuth() {
-    return Object.keys(sessionStorage).find((key) => key.includes("shoppy"));
+    return JSON.parse(sessionStorage.getItem("shoppy"));
   }
   async #initBuyCollection(user) {
     return await getDoc(this.#getFirebaseDoc("buy", user));
