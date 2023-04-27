@@ -9,7 +9,8 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getDatabase, ref, get } from "firebase/database";
+import { getDatabase, ref, get, set } from "firebase/database";
+import { v4 as uuid } from "uuid";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -69,4 +70,14 @@ async function adminUser(user) {
       }
       return user;
     });
+}
+export async function addNewProduct(product, imageUrl) {
+  const id = uuid();
+  return set(ref(database, `products/${id}`), {
+    ...product,
+    id,
+    price: parseInt(product.price),
+    image: imageUrl,
+    options: product.options.split(","),
+  });
 }

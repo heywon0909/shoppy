@@ -1,59 +1,180 @@
-import React from "react";
+import { addNewProduct } from "api/firebase";
+import { uploadImg } from "api/uploader";
+import { toast } from "react-toastify";
+import React, { useState } from "react";
 
 export default function NewItem() {
+  const [product, setProduct] = useState({});
+  const [file, setFile] = useState();
+  const [isUploading, setIsUploading] = useState(false);
+  console.log("product", product);
 
-  const getImgPreview = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    console.log('타니', e.target.files[0]);
-    document.getElementById('new').src = reader.result;
-  }
+  const handleChange = async (e) => {
+    const { name, value, files } = e.target;
+    console.log("files", files);
+    if (name === "file") {
+      setFile(files && files[0]);
+      return;
+    }
+    setProduct((product) => ({ ...product, [name]: value }));
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsUploading(true);
+    uploadImg(file)
+      .then((url) => {
+        addNewProduct(product, url).then((result) =>
+          toast.success("성공적으로 등록하였습니다.", { autoClose: 2000 })
+        );
+      })
+      .catch((error) => {
+        console.error(error);
+        toast.error("상품을 등록하는데 오류가 발생하였습니다.");
+      })
+      .finally(() => setIsUploading(false));
+  };
   return (
-    <div className='h-screen'>
+    <div className="h-screen">
       <div className="w-full flex justify-center items-center p-2">
         <h2 className="font-semibold">새로운 제품 등록</h2>
       </div>
       <section className="flex justify-center p-2 h-screen">
         <article className="w-full max-w-screen-xl flex justify-center flex-wrap">
-          <div className="lg:w-2/6 md:w-3/6 w-full h-2/3 bg-gray-400 flex justify-center">
-            <img
-              className="h-max w-full"
-              title="newProducts"
-              alt="newProducts"
-              id="new"
-            />
+          <div className="md:h-11/12 h-2/3 lg:w-2/6 md:w-3/6 w-full bg-gray-300 flex justify-center">
+            {!file && (
+              <div className="absolute font-semibold text-zinc-600">
+                제품 이미지를 업로드 해주세요 🙆‍♀️
+              </div>
+            )}
+            {file && (
+              <img
+                className="h-full w-full"
+                id="imagePreview"
+                src={URL.createObjectURL(file)}
+                title="newProduct"
+                alt="newProduct"
+              />
+            )}
           </div>
           <div className="flex flex-col xl:w-3/6 md:w-full w-11/12 h-2/3 xl:relative xl:top-16 p-2">
-            <form className="lg:space-y-10 grid gap-4">
+            <form className="lg:space-y-10 grid gap-4" onSubmit={handleSubmit}>
               <div>
-                <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="file_input">Upload file</label>
-                <input className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file" onChange={(e) => { getImgPreview(e) }}/>
+                <label
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  htmlFor="file_input"
+                >
+                  Upload file
+                </label>
+                <input
+                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                  type="file"
+                  accept="image/*"
+                  name="file"
+                  required
+                  onChange={handleChange}
+                />
               </div>
+              {/* title  제품명 */}
               <div className="relative z-0 w-full mb-6 group">
-                  <input type="email" name="floating_email" id="floating_email" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                  <label htmlFor="floating_email" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">제품명</label>
+                <input
+                  type="text"
+                  name="title"
+                  id="title"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                  onChange={handleChange}
+                />
+                <label
+                  htmlFor="title"
+                  className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >
+                  제품명
+                </label>
               </div>
+              {/* price 가격 */}
               <div className="relative z-0 w-full mb-6 group">
-                  <input type="password" name="floating_password" id="floating_password" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                  <label htmlFor="floating_password" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">가격</label>
+                <input
+                  type="text"
+                  name="price"
+                  id="price"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                  onChange={handleChange}
+                />
+                <label
+                  htmlFor="price"
+                  className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >
+                  가격
+                </label>
               </div>
+              {/* description 설명 */}
               <div className="relative z-0 w-full mb-6 group">
-                  <input type="password" name="repeat_password" id="floating_repeat_password" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                  <label htmlFor="floating_repeat_password" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">설명</label>
+                <input
+                  type="text"
+                  name="description"
+                  id="description"
+                  className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
+                  required
+                  onChange={handleChange}
+                />
+                <label
+                  htmlFor="description"
+                  className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                >
+                  설명
+                </label>
               </div>
+              {/* 성별 */}
               <div className="grid md:grid-cols-2 md:gap-6">
                 <div className="relative z-0 w-full mb-6 group">
-                    <input type="text" name="floating_first_name" id="floating_first_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                    <label htmlFor="floating_first_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">성별</label>
+                  <input
+                    type="text"
+                    name="gender"
+                    id="gender"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    required
+                    onChange={handleChange}
+                  />
+                  <label
+                    htmlFor="gender"
+                    className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    성별
+                  </label>
                 </div>
+                {/* options(옵션들(콤마(,)f로 구분)*/}
                 <div className="relative z-0 w-full mb-6 group">
-                    <input type="text" name="floating_last_name" id="floating_last_name" className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
-                    <label htmlFor="floating_last_name" className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">사이즈</label>
+                  <input
+                    type="text"
+                    name="options"
+                    id="options"
+                    className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
+                    required
+                    onChange={handleChange}
+                  />
+                  <label
+                    htmlFor="options"
+                    className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+                  >
+                    옵션
+                  </label>
                 </div>
               </div>
-              <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">등록하기</button>
+              {/* 제품 등록하기 */}
+              <button
+                type="submit"
+                onSubmit={handleSubmit}
+                disabled={isUploading ? true : false}
+                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:bg-slate-500"
+              >
+                등록하기
+              </button>
             </form>
           </div>
         </article>

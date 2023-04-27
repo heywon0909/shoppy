@@ -32,7 +32,9 @@ export default function Header() {
           <mark className="font-semibold text-purple-600 pe-2">HW</mark> SHOPPY
         </div>
         <div className="flex grow flex-row-reverse p-2 md:mr-5 -mr-3">
-          {user ? <User user={user} /> : ""}
+          <div className="flex items-center pl-2 shrink-0">
+            {user ? <User user={user} /> : ""}
+          </div>
           {user && user.isAdmin && (
             <button className="ml-2">
               <FiEdit
