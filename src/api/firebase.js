@@ -9,7 +9,7 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getDatabase, ref, get, set } from "firebase/database";
+import { getDatabase, ref, get, set, onValue } from "firebase/database";
 import { v4 as uuid } from "uuid";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -80,4 +80,16 @@ export async function addNewProduct(product, imageUrl) {
     image: imageUrl,
     options: product.options.split(","),
   });
+}
+export async function getProducts() {
+  return get(ref(database, "products")) //
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log("1", Object.values(snapshot.val()));
+        return Object.values(snapshot.val());
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => console.log(error));
 }

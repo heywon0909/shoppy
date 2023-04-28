@@ -1,20 +1,23 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import Item from "./Item";
-import { useShopApi } from "context/ShopContext";
+import { getProducts } from "api/firebase";
 
 export default function Items() {
-  const { shop } = useShopApi();
-  const { isLoading: isGetItemsLoading, data } = useQuery(["items"], () =>
-    shop.getItem()
-  );
+  // const { shop } = useShopApi();
+  const {
+    isLoading: isGetItemsLoading,
+    error,
+    data: products,
+  } = useQuery(["items"], getProducts);
 
   return (
     <section className="flex xl:w-9/12  md:w-2/3 w-full h-full mt-10 flex-wrap justify-center">
       {!isGetItemsLoading &&
-        data.map((item) => {
-          return <Item item={item} index={item.id} key={item.id} />;
+        products.map((product) => {
+          return <Item item={product} index={product.id} key={product.id} />;
         })}
+      {error && <div>not found</div>}
       {isGetItemsLoading && (
         <div>
           <img

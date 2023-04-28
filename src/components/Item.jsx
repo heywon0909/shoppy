@@ -1,19 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Item({ item, index }) {
-  const { title, price, snippet } = item;
+export default function Item({ item }) {
+  const { image, title, price, id, category } = item;
   const navigate = useNavigate();
-  const goDetail = () => navigate(`/item/${index}`);
+  const goDetail = () => navigate(`/item/${id}`, { state: { item } });
 
   return (
     <div
       className="xl:w-1/4 lg:w-2/5 md:w-1/2 w-max flex flex-col items-stretch cursor-pointer"
-      key={index}
+      key={id}
     >
       <article className="md:p-2 md:h-11/12 h-5/6">
         <img
-          src={snippet.url}
+          src={image}
           className="h-full w-full"
           alt={title}
           onClick={goDetail}
@@ -21,12 +21,9 @@ export default function Item({ item, index }) {
         <div className="flex flex-col p-2">
           <p className="text-zinc-600 text-sm">{title}</p>
           <p className="text-md font-semibold">
-            {new Intl.NumberFormat("ko-KR").format(price)}
+            {new Intl.NumberFormat("ko-KR").format(price)} 원
           </p>
-          {/* <div className='flex flex-row'>
-            <BsHeartFill className='pt-1 text-zinc-500' />
-            <p className='pb-1 text-sm text-zinc-500'>{heart}+</p>
-          </div> */}
+          <p className="text-zinc-600 text-sm">{category}</p>
         </div>
       </article>
     </div>
