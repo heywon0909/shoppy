@@ -19,7 +19,7 @@ export function AuthContextProvider({ children }) {
     });
   }, []);
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user,uid:user && user.uid }}>{children}</AuthContext.Provider>
   );
 }
 

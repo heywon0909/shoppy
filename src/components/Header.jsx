@@ -1,11 +1,11 @@
 import React from "react";
-import { SlHandbag } from "react-icons/sl";
 import { BsHeart } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import User from "./User";
 import { useAuthApi } from "context/AuthContext";
+import CartBut from './CartBut';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function Header() {
             {user ? <User user={user} /> : ""}
           </div>
           {user && user.isAdmin && (
-            <button className="ml-2">
+            <button className="ml-2 shrink-0">
               <FiEdit
                 size="20"
                 className="text-slate-900"
@@ -44,13 +44,7 @@ export default function Header() {
               />
             </button>
           )}
-          <button className="ml-2">
-            <SlHandbag
-              size="20"
-              className="text-slate-900"
-              onClick={() => goMyPage("buying")}
-            />
-          </button>
+          <CartBut onClick={goMyPage} />
           <button>
             <BsHeart
               size="20"
