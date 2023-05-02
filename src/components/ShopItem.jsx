@@ -1,48 +1,42 @@
-import { useShopApi } from "context/ShopContext";
 import React, { useCallback } from "react";
 import CloseBut from "./CloseBut";
 import { toast } from "react-toastify";
 import GoBuyLink from "./GoBuyLink";
 import AddBut from "./AddBut";
-export default function ShopItem({ item, onClose }) {
-  const { count, title, snippet } = item;
-
-  const { shop } = useShopApi();
+import { addNewCart, removeItem } from "api/firebase";
+import { useAuthApi } from "context/AuthContext";
+export default function ShopItem({
+  item,
+  item: { image, count, title, price },
+  onClose,
+}) {
+  console.log("item", item);
+  const { user } = useAuthApi();
 
   const handleDelete = useCallback(
     async (item) => {
-      const stored = JSON.parse(sessionStorage.getItem("shoppy"));
-      try {
-        const result = await shop.delBuying(stored, item);
-
-        if (result) {
+      return removeItem("cart", item.id, user?.uid)
+        .then((result) => {
           toast.success("장바구니에서 상품이 삭제되었습니다", {
             autoClose: 2000,
           });
           onClose();
-        }
-      } catch (error) {
-        console.error(error);
-        toast.error("오류가 발생하였습니다.");
-      }
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("오류가 발생하였습니다.");
+        });
     },
-    [onClose, shop]
+    [onClose, user]
   );
 
   const handleAdd = useCallback(
     async (item) => {
-      const stored = JSON.parse(sessionStorage.getItem("shoppy"));
-      try {
-        const result = await shop.addBuying(stored, item);
-        if (result) {
-          onClose();
-        }
-      } catch (error) {
-        console.error(error);
-        toast.error("오류가 발생하였습니다.");
-      }
+      await addNewCart(item, user?.uid).then((result) => {
+        onClose();
+      });
     },
-    [onClose, shop]
+    [onClose, user]
   );
 
   return (
@@ -50,7 +44,7 @@ export default function ShopItem({ item, onClose }) {
       <td>
         <div className="flex p-2">
           <div className=" h-32 w-24 bg-slate-300">
-            <img src={snippet.url} alt={title} className="w-full h-32" />
+            <img src={image} alt={title} className="w-full h-32" />
           </div>
           <div className="flex flex-col p-2 h-24">
             <p className="text-sm">{title}</p>
@@ -66,7 +60,7 @@ export default function ShopItem({ item, onClose }) {
       <td>
         <CloseBut item={item} handleDelete={handleDelete} />
         <div className="text-sm p-2 h-24 text-center">
-          {new Intl.NumberFormat("ko-KR").format(item.price)}원
+          {new Intl.NumberFormat("ko-KR").format(price)}원
         </div>
         <GoBuyLink
           item={item}

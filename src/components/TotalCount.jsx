@@ -5,10 +5,10 @@ export default function TotalCount({ items }) {
     let count = { total: 0, discountSum: 0, buyItems: [] };
     if (!items) return;
     Object.values(items).forEach((item) => {
-      const { price, snippet } = item;
+      const { price, discount } = item;
       count.total += parseInt(price) * Number(item.count);
-      count.discountSum +=
-        (snippet.discount / 100) * price * Number(item.count);
+      count.discountSum += (discount / 100) * price * Number(item.count);
+
       count.buyItems.push(item.id);
     });
     return count;

@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import { useShopApi } from "context/ShopContext";
 import { useNavigate } from "react-router-dom";
+import { getInterest } from "api/firebase";
+import { useAuthApi } from "context/AuthContext";
 export default function MyInterest() {
-  const { shop } = useShopApi();
+  const { user } = useAuthApi();
   const navigate = useNavigate();
   const goDetail = (id) => navigate(`/item/${id}`);
-  const { isLoading, data: items } = useQuery(["myInterest"], () => {
-    const stored = JSON.parse(sessionStorage.getItem("shoppy"));
-    return shop.getInterest(stored);
-  });
+  const { isLoading, data: items } = useQuery(["myInterest"], () =>
+    getInterest(null, user?.uid)
+  );
 
   return (
     <div className="w-full flex flex-wrap h-full p-2">
@@ -17,10 +17,13 @@ export default function MyInterest() {
         items?.length > 0 &&
         items.map((item) => {
           return (
-            <div className="w-1/3 p-2 flex flex-col" key={item.id}>
-              <div className="w-40 h-56 bg-slate-100">
+            <div
+              className="md:basis-1/3 w-full p-2 flex flex-col"
+              key={item.id}
+            >
+              <div className="w-full bg-slate-100">
                 <img
-                  src={item.snippet.url}
+                  src={item.image}
                   alt={item.title}
                   className="h-full w-full cursor-pointer"
                   onClick={() => goDetail(item.id)}

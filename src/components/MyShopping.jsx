@@ -1,41 +1,19 @@
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { useShopApi } from "context/ShopContext";
 import { toast } from "react-toastify";
 import AddBut from "./AddBut";
 import { useLocation, useNavigate } from "react-router-dom";
+import { addBuy } from "api/firebase";
+import { useAuthApi } from "context/AuthContext";
 export default function MyShopping({ route }) {
-  const { shop } = useShopApi();
+  const { user } = useAuthApi();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   console.log("lo", pathname);
-  const stored = JSON.parse(sessionStorage.getItem("shoppy"));
 
   const [items, setItems] = useState(
     () => JSON.parse(sessionStorage.getItem("item")) || []
   );
 
-  const { refetch: onBuyItem } = useQuery(
-    ["getBuy"],
-    () => {
-      if (pathname.includes("buying")) {
-        shop.delBuying(stored, items);
-      }
-      const itemsArr = items.map((item) => ({ ...item, date: new Date() }));
-      sessionStorage.removeItem("item");
-      return shop.buyItem(stored, itemsArr);
-    },
-    {
-      enabled: false,
-      onSuccess: (data) => {
-        if (data) {
-          toast.success("결제가 완료되었습니다.", { autoClose: 2000 });
-          sessionStorage.removeItem("item");
-          navigate("/secured/mypage/myPage");
-        }
-      },
-    }
-  );
   const handleAdd = (item) => {
     setItems((prev) =>
       prev.map((data) => {
@@ -44,6 +22,17 @@ export default function MyShopping({ route }) {
         } else return { ...data };
       })
     );
+  };
+  const handleBuy = () => {
+    addBuy(items, user.uid)
+      .then((result) => {
+        toast.success("결제가 완료되었습니다.", { autoClose: 2000 });
+        sessionStorage.removeItem("item");
+        navigate("/secured/mypage/myPage");
+      })
+      .catch((error) =>
+        toast.error("결제하는데 에러가 발생하였습니다.", { autoClose: 2000 })
+      );
   };
 
   return (
@@ -65,7 +54,7 @@ export default function MyShopping({ route }) {
                     <div className="flex p-2">
                       <div className=" h-32 w-24 bg-slate-300">
                         <img
-                          src={item?.snippet.url}
+                          src={item.image}
                           alt={item.title}
                           className="w-full h-32"
                         />
@@ -97,7 +86,7 @@ export default function MyShopping({ route }) {
         <div className="w-full flex justify-center p-2 mt-2">
           <button
             className="md:w-2/3 w-full bg-slate-900 text-white p-4 text-sm"
-            onClick={() => onBuyItem()}
+            onClick={handleBuy}
           >
             결제하기
           </button>

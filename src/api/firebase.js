@@ -9,7 +9,17 @@ import {
   GoogleAuthProvider,
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-import { getDatabase, ref, get, set, onValue } from "firebase/database";
+import {
+  getDatabase,
+  ref,
+  get,
+  set,
+  child,
+  push,
+  update,
+  runTransaction,
+  remove,
+} from "firebase/database";
 import { v4 as uuid } from "uuid";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -85,7 +95,109 @@ export async function getProducts() {
   return get(ref(database, "products")) //
     .then((snapshot) => {
       if (snapshot.exists()) {
-        console.log("1", Object.values(snapshot.val()));
+        return Object.values(snapshot.val());
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => console.log(error));
+}
+export async function getCarts(user) {
+  return get(ref(database, `cart/${user}`)) //
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log("san", snapshot.val(), Object.values(snapshot.val()));
+        return Object.values(snapshot.val());
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => console.log(error));
+}
+export async function addNewCart(product, user) {
+  if (!user) return Error("로그인 후 이용가능합니다.");
+  console.log("장바구니", product);
+  return get(ref(database, `cart/${user}/${product?.id}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        // 수정
+        return existInFireBase("cart", snapshot.val(), user);
+      } else {
+        // 새로 생성
+        return set(ref(database, `cart/${user}/${product?.id}`), {
+          ...product,
+          count: 1,
+        });
+      }
+    })
+    .catch((error) => console.error(error));
+}
+
+async function existInFireBase(type, product, user) {
+  const updates = {};
+  updates[`${type}/${user}/${product.id}`] = {
+    ...product,
+    count: product.count + 1,
+  };
+  update(ref(database), updates);
+}
+
+export async function addMyInterest(product, user) {
+  if (!user) return Error("로그인 후 이용가능합니다.");
+  console.log("찜하기", product);
+  return get(ref(database, `interest/${user}/${product?.id}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        // 수정
+        return existInFireBase("interest", snapshot.val(), user);
+      } else {
+        // 새로 생성
+        return set(ref(database, `interest/${user}/${product?.id}`), {
+          ...product,
+        });
+      }
+    })
+    .catch((error) => console.error(error));
+}
+export async function getInterest(uid, user) {
+  let url = uid === null ? `interest/${user}` : `interest/${user}/${uid}`;
+  return get(ref(database, url)) //
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        return Object.values(snapshot.val());
+      } else {
+        return [];
+      }
+    })
+    .catch((error) => console.log(error));
+}
+export async function removeItem(type, uid, user) {
+  return set(ref(database, `${type}/${user}/${uid}`), null);
+}
+export async function addBuy(product, user) {
+  if (!user) return Error("로그인 후 이용가능합니다.");
+  console.log("결제", product);
+  return get(ref(database, `buy/${user}/${new Date().getTime()}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        // 수정
+        return existInFireBase("buy", snapshot.val(), user);
+      } else {
+        // 새로 생성
+        return set(ref(database, `buy/${user}/${new Date().getTime()}`), {
+          items: [...product],
+          date: new Date().getTime(),
+        });
+      }
+    })
+    .catch((error) => console.error(error));
+}
+export async function getBuy(uid, user) {
+  let url = uid === null ? `buy/${user}` : `buy/${user}/${uid}`;
+  return get(ref(database, url)) //
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log("snap", snapshot.val());
         return Object.values(snapshot.val());
       } else {
         return [];
