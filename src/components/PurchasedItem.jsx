@@ -18,7 +18,7 @@ export default function PurchasedItem({
             </div>
             <div className="flex p-3 h-24 w-full sm:place-content-between flex-wrap">
               <p className="text-sm md:w-24 sm:w-full">{title}</p>
-              <p className="text-sm md:w-24 sm:w-full">옵션: {options}</p>
+              <p className="text-sm md:w-24 sm:w-full text-pink-600 font-semibold">옵션: {options}</p>
               <div className="flex text-sm text-zinc-600 flex-wrap">
                 <p className="text-sm">{count} 개</p>
               </div>

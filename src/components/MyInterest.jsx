@@ -10,11 +10,11 @@ export default function MyInterest() {
   const { isLoading, data: items } = useQuery(["myInterest"], () =>
     getInterest(null, user?.uid)
   );
+  const hasInterest = items && items.length > 0;
 
   return (
     <div className="w-full flex flex-wrap h-full p-2">
-      {!isLoading &&
-        items?.length > 0 &&
+      {hasInterest &&
         items.map((item) => {
           return (
             <div
@@ -36,7 +36,7 @@ export default function MyInterest() {
             </div>
           );
         })}
-      {items?.length <= 0 ? (
+      {!hasInterest ? (
         <div className="w-full flex justify-center h-40 items-center text-sm text-purple-600">
           위시리스트에 상품을 등록해주세요
         </div>

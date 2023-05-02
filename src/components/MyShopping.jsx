@@ -61,7 +61,7 @@ export default function MyShopping({ route }) {
                       </div>
                       <div className="flex flex-col p-2 h-24">
                         <p className="text-sm">{item.title}</p>
-                        <div className="flex text-sm text-zinc-600 flex-wrap">
+                        <div className="flex text-sm text-pink-600 flex-wrap font-semibold">
                           옵션 : {item.options}
                         </div>
                       </div>

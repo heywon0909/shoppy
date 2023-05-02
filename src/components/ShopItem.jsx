@@ -5,6 +5,7 @@ import GoBuyLink from "./GoBuyLink";
 import AddBut from "./AddBut";
 import { addNewCart, removeItem } from "api/firebase";
 import { useAuthApi } from "context/AuthContext";
+
 export default function ShopItem({
   item,
   item: { image, count, title, price },
@@ -43,11 +44,11 @@ export default function ShopItem({
     <>
       <td>
         <div className="flex p-2">
-          <div className=" h-32 w-24 bg-slate-300">
-            <img src={image} alt={title} className="w-full h-32" />
+          <div className="md:h-48 h-32 md:w-3/6 w-24 bg-slate-300">
+            <img src={image} alt={title} className="w-full h-full" />
           </div>
-          <div className="flex flex-col p-2 h-24">
-            <p className="text-sm">{title}</p>
+          <div className="flex flex-col p-2 h-24 md:w-full w-20">
+            <p className="text-sm line-clamp-2">{title}</p>
           </div>
         </div>
       </td>
@@ -58,13 +59,13 @@ export default function ShopItem({
         </div>
       </td>
       <td>
-        <CloseBut item={item} handleDelete={handleDelete} />
-        <div className="text-sm p-2 h-24 text-center">
+        <CloseBut item={item} handleDelete={handleDelete}  />
+        <div className="flex text-sm p-2 h-20 text-center justify-center">
           {new Intl.NumberFormat("ko-KR").format(price)}원
         </div>
         <GoBuyLink
           item={item}
-          classFmt={"w-full bg-slate-900 text-white p-2"}
+          classFmt={`w-full bg-slate-900 text-white p-2 sm:text-sm h-full`}
         />
       </td>
     </>

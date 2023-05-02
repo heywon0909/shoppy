@@ -12,6 +12,8 @@ export default function MyCart() {
     getCarts(user.uid)
   );
 
+  const hasCarts = items && items.length > 0;
+
   return (
     <div className="p-2 grow-0 flex flex-wrap">
       <div className="w-full p-2 flex flex-col">
@@ -24,7 +26,7 @@ export default function MyCart() {
             </tr>
           </thead>
           <tbody>
-            {items &&
+            {hasCarts &&
               items.map((item) => {
                 return (
                   <tr
@@ -37,12 +39,12 @@ export default function MyCart() {
               })}
           </tbody>
         </table>
-        {!items && items?.length === 0 && (
+        {!hasCarts && (
           <div className="w-full flex justify-center text-sm h-40 items-center">
             <div className="text-purple-700">장바구니에 상품을 담아주세요</div>
           </div>
         )}
-        {items?.length > 0 ? (
+        {hasCarts ? (
           <TotalCount items={items} key="totalCount" />
         ) : null}
       </div>

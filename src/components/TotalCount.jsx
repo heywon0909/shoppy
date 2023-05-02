@@ -8,7 +8,6 @@ export default function TotalCount({ items }) {
       const { price, discount } = item;
       count.total += parseInt(price) * Number(item.count);
       count.discountSum += (discount / 100) * price * Number(item.count);
-
       count.buyItems.push(item.id);
     });
     return count;
@@ -16,7 +15,7 @@ export default function TotalCount({ items }) {
 
   const sum = useMemo(() => setShopTotal(items), [items, setShopTotal]);
   const { total, discountSum } = sum;
-
+  const SHIPPING = 3000;
   return (
     <div className="w-full flex flex-col mt-10 border-t border-zinc-600 space-y-3">
       <div className="w-full flex border-b border-zinc-300 text-sm p-2">
@@ -34,7 +33,7 @@ export default function TotalCount({ items }) {
         </div>
         <div className="w-5">+</div>
         <div className="w-full flex flex-col justify-center">
-          <div className="flex justify-center">2500원</div>
+          <div className="flex justify-center">{SHIPPING}원</div>
           <div className="text-xs text-zinc-600 flex justify-center">
             배송비
           </div>
@@ -49,7 +48,7 @@ export default function TotalCount({ items }) {
         <div className="w-5">=</div>
         <div className="w-full flex flex-col justify-center">
           <div className="flex justify-center">
-            {total - discountSum + 2500}원
+            {total - discountSum + SHIPPING}원
           </div>
           <div className="text-xs text-zinc-600 flex justify-center">
             상품금액
