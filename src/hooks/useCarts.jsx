@@ -8,7 +8,7 @@ export default function useCarts() {
   const cartsQuery = useQuery(["cartItems"], () => getCarts(uid), {
     enabled: !!uid,
   });
-  const addNewCartItem = useMutation(({ item }) => addNewCart(item, uid), {
+  const addNewCartItem = useMutation((item) => addNewCart(item, uid), {
     onSuccess: () => queryClient.invalidateQueries(["cartItems"]),
   });
   return { cartsQuery, addNewCartItem };
