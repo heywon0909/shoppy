@@ -5,6 +5,7 @@ import GoBuyLink from "./GoBuyLink";
 import AddBut from "./AddBut";
 import { addNewCart, removeItem } from "api/firebase";
 import { useAuthApi } from "context/AuthContext";
+import useCarts from "hooks/useCarts";
 
 export default function ShopItem({
   item,
@@ -13,22 +14,18 @@ export default function ShopItem({
 }) {
   console.log("item", item);
   const { user } = useAuthApi();
-
+  const { removeCartItem } = useCarts();
   const handleDelete = useCallback(
     async (item) => {
-      return removeItem("cart", item.id, user?.uid)
-        .then((result) => {
+      return removeCartItem.mutate(item.id, {
+        onSuccess: () => {
           toast.success("장바구니에서 상품이 삭제되었습니다", {
             autoClose: 2000,
           });
-          onClose();
-        })
-        .catch((error) => {
-          console.error(error);
-          toast.error("오류가 발생하였습니다.");
-        });
+        },
+      });
     },
-    [onClose, user]
+    [removeCartItem]
   );
 
   const handleAdd = useCallback(
@@ -59,7 +56,7 @@ export default function ShopItem({
         </div>
       </td>
       <td>
-        <CloseBut item={item} handleDelete={handleDelete}  />
+        <CloseBut item={item} handleDelete={handleDelete} />
         <div className="flex text-sm p-2 h-20 text-center justify-center">
           {new Intl.NumberFormat("ko-KR").format(price)}원
         </div>
