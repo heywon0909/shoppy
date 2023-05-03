@@ -62,21 +62,14 @@ export function logout() {
 }
 
 async function adminUser(user) {
-  return get(ref(database, "admins")) //
+  return get(ref(database, "admin")) //
     .then((snapshot) => {
       if (snapshot.exists()) {
         const admins = snapshot.val();
-        console.log(
-          "admins",
-          admins[0],
-          user.uid,
-          admins[0]?.slice(1, admins[0].length - 1) === String(user.uid)
-        );
-        const isAdmin = admins.filter(
-          (id) => id?.slice(1, id.length - 1) === String(user.uid)
-        );
 
-        return { ...user, isAdmin: isAdmin?.length > 0 ? true : false };
+        let isAdmin = admins[0] === user.uid;
+
+        return { ...user, isAdmin: isAdmin };
       }
       return user;
     });

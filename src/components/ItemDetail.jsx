@@ -10,6 +10,7 @@ import {
   getInterest,
   removeItem,
 } from "api/firebase";
+import useCarts from "hooks/useCarts";
 export default function ItemDetail({
   id,
   item,
@@ -17,32 +18,34 @@ export default function ItemDetail({
 }) {
   const [selected, setSelected] = useState(options && options[0]);
   const changeSelect = (e) => setSelected(e.target.value);
-  const { user,uid } = useAuthApi();
-
+  const { user, uid } = useAuthApi();
+  const { addNewCartItem } = useCarts();
   const {
     isLoading: isInterest,
     data: interest,
     refetch: readingItem,
-  } = useQuery(["exist"], () => getInterest(id,uid), {
+  } = useQuery(["exist"], () => getInterest(id, uid), {
     enabled: !!user,
   });
 
   const handleCart = () => {
     if (!user)
       return toast.error("로그인 후 이용해주세요.", { autoClose: 2000 });
-    addNewCart({...item,options:selected},uid).then((result) => {
-      toast.success("장바구니에 추가되었습니다.", { autoClose: 2000 });
-    });
+
+    addNewCartItem.mutate(
+      { ...item, options: selected },
+      {
+        onSuccess: () => {
+          toast.success("장바구니에 추가되었습니다.", { autoClose: 2000 });
+        },
+      }
+    );
   };
   const handleInterest = (type) => {
     if (type === "filled") {
-      removeItem("interest", id,uid).then((result) =>
-        readingItem(id,uid)
-      );
+      removeItem("interest", id, uid).then((result) => readingItem(id, uid));
     } else {
-      addMyInterest(item,uid).then((result) =>
-        readingItem(id,uid)
-      );
+      addMyInterest(item, uid).then((result) => readingItem(id, uid));
     }
   };
 
@@ -91,7 +94,7 @@ export default function ItemDetail({
                 </button>
 
                 <GoBuyLink
-                  item={{ ...item,options:selected }}
+                  item={{ ...item, options: selected }}
                   classFmt={"w-full bg-purple-500 text-white p-2"}
                 />
               </div>

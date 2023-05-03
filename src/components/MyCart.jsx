@@ -1,16 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import TotalCount from "./TotalCount";
 import ShopItem from "./ShopItem";
-import { getCarts } from "api/firebase";
 import { useAuthApi } from "context/AuthContext";
+import useCarts from "hooks/useCarts";
 
 export default function MyCart() {
   const { user } = useAuthApi();
 
-  const { data: items, refetch: getBuyingItems } = useQuery(["getBuying"], () =>
-    getCarts(user.uid)
-  );
+  const {
+    cartsQuery: { data: items, refetch: getBuyingItems },
+  } = useCarts(user.uid);
 
   const hasCarts = items && items.length > 0;
 
@@ -44,9 +43,7 @@ export default function MyCart() {
             <div className="text-purple-700">장바구니에 상품을 담아주세요</div>
           </div>
         )}
-        {hasCarts ? (
-          <TotalCount items={items} key="totalCount" />
-        ) : null}
+        {hasCarts ? <TotalCount items={items} key="totalCount" /> : null}
       </div>
     </div>
   );

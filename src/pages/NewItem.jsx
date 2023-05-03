@@ -1,13 +1,15 @@
-import { addNewProduct } from "api/firebase";
 import { uploadImg } from "api/uploader";
 import { toast } from "react-toastify";
 import React, { useState } from "react";
+import useItems from "hooks/useItems";
 
 export default function NewItem() {
   const [product, setProduct] = useState({});
   const [file, setFile] = useState();
   const [isUploading, setIsUploading] = useState(false);
   console.log("product", product);
+
+  const { addNewItem } = useItems();
 
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
@@ -23,8 +25,13 @@ export default function NewItem() {
     setIsUploading(true);
     uploadImg(file)
       .then((url) => {
-        addNewProduct(product, url).then((result) =>
-          toast.success("성공적으로 등록하였습니다.", { autoClose: 2000 })
+        addNewItem.mutate(
+          { product, url },
+          {
+            onSuccess: () => {
+              toast.success("성공적으로 등록하였습니다.", { autoClose: 2000 });
+            },
+          }
         );
       })
       .catch((error) => {

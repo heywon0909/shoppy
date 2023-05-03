@@ -1,16 +1,11 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
 import Item from "./Item";
-import { getProducts } from "api/firebase";
+import useItems from "hooks/useItems";
 
 export default function Items() {
-  // const { shop } = useShopApi();
   const {
-    isLoading: isGetItemsLoading,
-    error,
-    data: products,
-  } = useQuery(["items"], getProducts);
-
+    itemsQuery: { isLoading: isGetItemsLoading, error, data: products },
+  } = useItems();
   return (
     <section className="flex xl:w-9/12  md:w-2/3 w-full h-full mt-10 flex-wrap justify-center">
       {!isGetItemsLoading &&
