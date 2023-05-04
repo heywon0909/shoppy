@@ -17,9 +17,9 @@ const router = createBrowserRouter([
     errorElement: <NotFoundPage />,
     children: [
       { index: true, element: <Home /> },
-      { path: "item/:id", element: <Item /> },
+      { path: "/item/:id", element: <Item /> },
       {
-        path: "products/new",
+        path: "/products/new",
         element: (
           <ProtectedLayout requiredAdmin>
             <NewItem />
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "secured/mypage/myPage",
+        path: "/secured/mypage/myPage",
         element: (
           <ProtectedLayout>
             <MyPage />
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "myPage/myWishList",
+        path: "/myPage/myWishList",
         element: (
           <ProtectedLayout>
             <MyPage />
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "myPage/order/cart",
+        path: "/myPage/order/cart",
         element: (
           <ProtectedLayout>
             <MyPage />
@@ -51,7 +51,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "myPage/order/new/:items",
+        path: "/myPage/order/new/:items",
         element: (
           <ProtectedLayout>
             <MyPage />
@@ -59,7 +59,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "myPage/order/new/buying/:items",
+        path: "/myPage/order/new/buying/:items",
         element: (
           <ProtectedLayout>
             <MyPage />

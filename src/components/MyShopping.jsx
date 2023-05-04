@@ -1,14 +1,12 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
 import AddBut from "./AddBut";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { addBuy } from "api/firebase";
 import { useAuthApi } from "context/AuthContext";
-export default function MyShopping({ route }) {
+export default function MyShopping() {
   const { user } = useAuthApi();
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-  console.log("lo", pathname);
 
   const [items, setItems] = useState(
     () => JSON.parse(sessionStorage.getItem("item")) || []

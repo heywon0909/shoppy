@@ -2,7 +2,6 @@ import { useAuthApi } from "context/AuthContext";
 import React, { useCallback, useMemo } from "react";
 
 export default function UserInfo({ items }) {
-  console.log("items", items);
   const { user } = useAuthApi();
   const { displayName } = user;
   const setUserShop = useCallback((items) => {
@@ -10,9 +9,7 @@ export default function UserInfo({ items }) {
     if (!items) return count;
     items.map((timeTb) => {
       timeTb.items.map((item) => {
-        console.log("item", item);
         const { price, discount } = item;
-        console.log("price", price, discount);
         count.totalSum += (1 - discount / 100) * price * Number(item.count);
         count.total += Number(item.count);
         return count;

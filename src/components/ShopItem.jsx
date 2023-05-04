@@ -3,7 +3,7 @@ import CloseBut from "./CloseBut";
 import { toast } from "react-toastify";
 import GoBuyLink from "./GoBuyLink";
 import AddBut from "./AddBut";
-import { addNewCart, removeItem } from "api/firebase";
+import { addNewCart } from "api/firebase";
 import { useAuthApi } from "context/AuthContext";
 import useCarts from "hooks/useCarts";
 
@@ -12,7 +12,6 @@ export default function ShopItem({
   item: { image, count, title, price },
   onClose,
 }) {
-  console.log("item", item);
   const { user } = useAuthApi();
   const { removeCartItem } = useCarts();
   const handleDelete = useCallback(

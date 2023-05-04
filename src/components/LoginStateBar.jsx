@@ -7,7 +7,6 @@ export default function LoginStateBar() {
   const navigate = useNavigate();
   const { user } = useAuthApi();
   const handleLogin = () => {
-    console.log("타니");
     if (user) {
       logout();
       navigate("/");

@@ -6,8 +6,12 @@ export default function TotalCount({ items }) {
     if (!items) return;
     Object.values(items).forEach((item) => {
       const { price, discount } = item;
+
       count.total += parseInt(price) * Number(item.count);
-      count.discountSum += (discount / 100) * price * Number(item.count);
+      count.discountSum +=
+        ((discount == null ? 100 : discount) / 100) *
+        price *
+        Number(item.count);
       count.buyItems.push(item.id);
     });
     return count;

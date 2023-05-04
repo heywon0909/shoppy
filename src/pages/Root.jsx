@@ -1,7 +1,6 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { ShopApiProvider } from "context/ShopContext";
 import Headers from "components/Headers";
 import { AuthContextProvider } from "context/AuthContext";
 
@@ -12,9 +11,7 @@ export default function Root() {
       <AuthContextProvider>
         <QueryClientProvider client={queryClient}>
           <Headers />
-          <ShopApiProvider>
-            <Outlet />
-          </ShopApiProvider>
+          <Outlet />
         </QueryClientProvider>
       </AuthContextProvider>
     </>

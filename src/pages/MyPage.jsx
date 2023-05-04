@@ -23,7 +23,7 @@ export default function MyPage() {
   };
   return (
     <div className="flex justify-center p-2">
-      <div className="md:w-2/3 w-full flex p-2 flex-wrap justify-center">
+      <div className="lg:w-2/3 w-full flex p-2 flex-wrap justify-center">
         <MyPageNav />
         <div className="xl:w-2/3 w-full flex flex-col justify-center text-xl p-2 space-y-4">
           <div

@@ -10,7 +10,6 @@ export default function UserShopInfo() {
   const { isLoading, data: items } = useQuery(["buyItems"], () =>
     getBuy(null, user?.uid)
   );
-  console.log("items", items);
 
   return (
     <>

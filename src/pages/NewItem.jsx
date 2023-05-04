@@ -7,13 +7,12 @@ export default function NewItem() {
   const [product, setProduct] = useState({});
   const [file, setFile] = useState();
   const [isUploading, setIsUploading] = useState(false);
-  console.log("product", product);
 
   const { addNewItem } = useItems();
 
   const handleChange = async (e) => {
     const { name, value, files } = e.target;
-    console.log("files", files);
+
     if (name === "file") {
       setFile(files && files[0]);
       return;

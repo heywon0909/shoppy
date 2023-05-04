@@ -1,4 +1,4 @@
-import { onUserStateChanged, signWithGoogle } from "api/firebase";
+import { onUserStateChanged } from "api/firebase";
 
 const { createContext, useEffect, useState, useContext } = require("react");
 
@@ -7,19 +7,12 @@ const AuthContext = createContext();
 export function AuthContextProvider({ children }) {
   const [user, setUser] = useState();
   useEffect(() => {
-    // const isTrue = Object.keys(sessionStorage).find((key) =>
-    //   key.includes("pendingRedirect")
-    // );
-    // if (isTrue) {
-    //   signWithGoogle();
-    // }
-
-    onUserStateChanged((data) => {
-      setUser(data);
-    });
+    onUserStateChanged((data) => setUser(data));
   }, []);
   return (
-    <AuthContext.Provider value={{ user,uid:user && user.uid }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ user, uid: user && user.uid }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 
