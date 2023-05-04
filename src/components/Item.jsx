@@ -8,7 +8,7 @@ export default function Item({ item }) {
 
   return (
     <div
-      className="xl:w-1/4 lg:w-2/5 md:w-1/2 sm:w-full  flex flex-col items-stretch cursor-pointer hover:scale-105"
+      className="xl:w-1/4 lg:w-2/5 md:w-1/2 w-full  flex flex-col items-stretch cursor-pointer hover:scale-105"
       key={id}
     >
       <article className="md:p-2 md:h-11/12 h-5/6">
