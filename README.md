@@ -2,7 +2,7 @@
 
 React를 공부하면서 제작한 쇼핑몰[HW-Shoppy] 반응형 홈페이지입니다. 🙌
 
-## 사용 기술 
+## 📌 사용 기술 
 
 1. javascript 
 2. React,Context API,React-Query(tanStack)
@@ -10,13 +10,13 @@ React를 공부하면서 제작한 쇼핑몰[HW-Shoppy] 반응형 홈페이지�
 5. firebase 
 
 
-### 프로젝트 목표 ✔
+### 📌 프로젝트 목표 
 
 - 반응형 웹 페이지 제작 
 - 효율적인 컴포넌트 설계 
 - 코드반복을 줄인 api 모듈 설계
 
-### 기능
+### 📌 기능
 
 1. 쇼핑몰 아이템 목록 리스트
 2. 구글 소셜 로그인
@@ -31,7 +31,8 @@ React를 공부하면서 제작한 쇼핑몰[HW-Shoppy] 반응형 홈페이지�
     - 구매 내역 조회 
 5. 관리자
     - 관리자 로그인시 상품 등록 가능 
-
+<br>
+<br>
 ![screencapture-localhost-3000-2023-04-19-11_01_58](https://user-images.githubusercontent.com/50330312/232947373-dcad0c0c-c402-4b6a-b58b-16ed58c90600.png)
 
 
