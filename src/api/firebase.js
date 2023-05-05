@@ -7,6 +7,8 @@ import {
   onAuthStateChanged,
   signOut,
   GoogleAuthProvider,
+  setPersistence,
+  inMemoryPersistence
 } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getDatabase, ref, get, set, update } from "firebase/database";
@@ -36,7 +38,11 @@ const provider = new GoogleAuthProvider();
 const database = getDatabase(app);
 
 export function signWithGoogle() {
-  signInWithRedirect(auth, provider).catch(console.warn);
+  setPersistence(auth, inMemoryPersistence)
+    .then(() => {
+     signInWithRedirect(auth, provider).catch(console.warn);
+    });
+ 
 }
 export function signWithGoogleLogin() {
   getRedirectResult(auth).catch(console.warn);

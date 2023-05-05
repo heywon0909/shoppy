@@ -2,7 +2,10 @@ import React from "react";
 
 export default function PurchasedItem({
   item: { image, title, count, id, price, options },
-}) {
+})
+
+{
+  const isOptionArr = Array.isArray(options);
   return (
     <>
       <div className="text-sm w-full border-b border-zinc-300 font-semibold float-right">
@@ -18,7 +21,7 @@ export default function PurchasedItem({
             <div className="flex p-3 h-24 w-full sm:place-content-between flex-wrap">
               <p className="text-sm md:w-24 sm:w-full">{title}</p>
               <p className="text-sm lg:w-24 w-full text-pink-600 font-semibold">
-                옵션: {options.join(",")}
+                옵션: {isOptionArr ? options?.join(",") : options}
               </p>
               <div className="flex text-sm text-zinc-600 flex-wrap">
                 <p className="text-sm">{count} 개</p>

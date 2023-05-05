@@ -16,10 +16,10 @@ export default function Items() {
       {isGetItemsLoading && (
         <div>
           <img
-            src="/assets/image/waiting-icon-gif.jpg"
+            src="/assets/image/CVyf.gif"
             title="loading"
             alt="loadingBar"
-            className="w-12 h-12"
+            className="w-60 h-36"
           />
         </div>
       )}

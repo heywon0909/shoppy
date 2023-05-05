@@ -6,11 +6,16 @@ const AuthContext = createContext();
 
 export function AuthContextProvider({ children }) {
   const [user, setUser] = useState();
+  const [loading, setLoading] = useState(null);
   useEffect(() => {
-    onUserStateChanged((data) => setUser(data));
+    setLoading(true);
+    onUserStateChanged((data) => {
+      setUser(data);
+      setLoading(false)
+    });
   }, []);
   return (
-    <AuthContext.Provider value={{ user, uid: user && user.uid }}>
+    <AuthContext.Provider value={{ user, uid: user && user.uid, isUserLoading:loading }}>
       {children}
     </AuthContext.Provider>
   );
